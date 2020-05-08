@@ -1,10 +1,10 @@
 <?php
     include_once 'DBUsuario.php';
+    include_once 'creacionUsuario.php';
     include_once 'Mensajes.php';
 
     class ApiUsuarios                        
     {
-
         //lista todos los datos
         function getAll()
         {
@@ -87,6 +87,7 @@
        function add($item)
        {
            $usuario = new usuario();
+           $creacion = new CrearUsuario();
            $mensaje = new Mensajes_JSON();
 
            $res = $usuario->validarCarnet($item);
@@ -94,10 +95,23 @@
       
             if($row['var'] == 0)
             {
+               //estado activo por defecto
+               $item['estado'] = 1;
+
+               //crear usuario apartir del nombre
+               $creacion->generarUsuario($item['nombre']);
+               $nuevousuario = $creacion->registrarUsuario();
+               $item['usuario'] = $nuevousuario;
+
+               //generar password
+               $this->generarPassword();
+               $item['password'] = $this->psswd;
+                
+               //registrar los datos en la base
                $res = $usuario->nuevoUsuario($item);
                $usuarios = array();
-               $usuarios["items"] = array();
-   
+                
+               //mostrar datos del usuario creado
                if($res->rowCount() == 1)
                {
                    $row = $res->fetch();
@@ -107,7 +121,7 @@
                        'password'      =>$row['password'],
                        'fechaCreacion' =>$row['fechaCreacion']
                    );
-                   array_push($usuarios['items'], $item);
+                   array_push($usuarios, $item);
                    
                    $mensaje->printJSON($usuarios);
                }
@@ -122,26 +136,23 @@
          //actualizar datos usuario administrador
          function update($item)
          {
-            
             $usuario = new usuario();
-            $res = $usuario->actualizarUsuario($item);
-             
-            //imprimir mensajes
             $mensaje = new Mensajes_JSON();
-            $mensaje->exito('Datos actualizados');
-         }
 
-         //actualizar datos usuario final
-         function updateUsu($item)
-         {
+            $i = count($item);
+
+            if($i != 3)
+            {
+                $res = $usuario->actualizarUsuario($item);
+            }
+            else
+            {
+                $res = $usuario->modificarDatos($item);
+            }
             
-            $usuario = new usuario();
-            $res = $usuario->modificarDatos($item);
-             
-            //imprimir mensajes
-            $mensaje = new Mensajes_JSON();
             $mensaje->exito('Datos actualizados');
          }
+         
 
          //eliminar usuario
          function delete($id)
@@ -173,7 +184,6 @@
             $usuario = new usuario();
 
             $usuarios = array();
-            $usuarios["items"] = array();
             $res = $usuario->loginUsuario($item);
             
             if($res->rowCount() != 0)
@@ -196,7 +206,7 @@
                         'estado'        =>$row['estado'],
                         'fechaCreacion' =>$row['fechaCreacion']
                     );
-                    array_push($usuarios['items'], $item);
+                    array_push($usuarios, $item);
                     
                     $mensaje->printJSON($usuarios);
                 }
@@ -219,16 +229,7 @@
             $psswd = substr( md5(microtime()), 1, $longitud);
             $psswd = strtoupper($psswd);
 
-            return $this->psswd = $psswd;
+            $this->psswd = $psswd;
         }
-
-        //obtener fecha actual
-        function obtenerFecha()
-        {
-            $date = date('Y-m-d h:i:s', time());
-            return $this->date = $date;
-        }
-
-
     }
 ?>

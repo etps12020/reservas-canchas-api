@@ -1,9 +1,9 @@
 <?php
-    include_once 'apiReservacion.php';
+    include_once 'apiHorarioReservacion.php';
     include_once 'Mensajes.php';
 
     $mensaje = new Mensajes_JSON();
-    $api = new ApiReservacion();
+    $api = new ApiHorariosReservacion();
 
     //peticion get para listar los horarios disponibles
     if ($_SERVER['REQUEST_METHOD'] == 'GET')
@@ -12,7 +12,7 @@
      
         if(isset($data['cancha']) && isset($data['fecha']))
         {
-            $fecha =  $api->formatFecha($data['fecha']);
+            $fecha =  $mensaje->formatFecha($data['fecha']);
 
             $item = array
             (

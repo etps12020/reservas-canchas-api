@@ -14,7 +14,7 @@
             //Agrega el estado por defecto a la reservacion
             $item['estado'] = 1;
 
-            //cconsultar el estado del usuario que solicita la reservacion
+            //consultar el estado del usuario que solicita la reservacion
             $id = $item['usuario'];
             $res = $perm->getEstadoUsuario($id);
             $row = $res->fetch(); 
@@ -153,72 +153,6 @@
             }
         }
 
-
-        function GenerarDisponibilidad($item)
-        {
-            $mensaje = new Mensajes_JSON();
-
-            $this->obtenerHorarios();
-            $horarios = $this->horarios;
-
-            $this->DisponibilidadActual($item);
-            $disponibilidad = $this->disponibilidad;
-
-            for($i = 0; $i< count($horarios); $i++)
-            {
-                echo $horarios['Horario'];
-            }
-
-
-        }
-
-        //consultar horarios
-        function obtenerHorarios()
-        {
-            $hor = new horarioReservacion();
-            $res = $hor->obtenerHorarios();
-
-            $horarios = array();
-
-            if($res->rowCount())
-            {
-                while($row = $res->fetch(PDO::FETCH_ASSOC))
-                {
-                    $item = array(
-                        'Horario'      =>$row['idHorarioReservacion'],
-                        'horaInicio'   =>$row['horaInicio'],
-                        'horaFin'      =>$row['horaFin']
-                    );
-                    array_push($horarios, $item);
-                }
-                $this->horarios = $horarios;
-            }
-        }
-
-        function DisponibilidadActual($item)
-        {
-            $reserva = new reservacion();
-
-            $res = $reserva->validarDisponibilidadActual($item);
-            $disponibilidad = array();
-
-            if($res->rowCount())
-            {
-                while($row = $res->fetch(PDO::FETCH_ASSOC))
-                {
-                    $var = array(
-                        'Horario'       =>$row['Horario'],
-                        'horaInicio'    =>$row['horaInicio'],
-                        'horaFin'       =>$row['horaFin'],
-                        'estado'        =>$row['estado']
-                    );
-                    array_push($disponibilidad, $var);
-                }
-            
-                $this->disponibilidad = $disponibilidad;
-            }
-        }
-
         //obtener Usuario
         function obtenerIdUsuario($usu)
         {
@@ -240,29 +174,6 @@
             $this->idReserva = $idReserva = $row['idR'];
             $this->idUsu = $idUsu = $row['usu'];
         }
-
-        //obtener fecha actual
-        function obtenerFecha()
-        {
-            $date = date('Y-m-d h:i:s', time());
-            return $this->date = $date;
-        }
-
-        //modificar el formato de la fecha recibida
-        function formatFecha($fecha)
-        {
-            if(strpos($fecha, '/') !==  false)
-            {
-                $fecha = date_create_from_format('d/m/Y', $fecha);
-                $date =  date_format($fecha, 'Y-m-d');
-            }
-            else
-            {
-                $date = $fecha;    
-            }
-            return $this->date =$date;
-        }
-
 
     }
 ?>

@@ -1,5 +1,6 @@
 <?php
     include_once 'DBHorarioReservacion.php';
+    include_once 'DBReservacion.php';
     include_once 'Mensajes.php';
 
     class ApiHorariosReservacion                        
@@ -113,6 +114,74 @@
                 $mensaje->error('No se puede eliminar este dato ya que esta siendo utilizado');
             }
             
+        }
+
+        function GenerarDisponibilidad($item)
+        {
+            $mensaje = new Mensajes_JSON();
+
+            $this->obtenerHorarios();
+            $horarios = $this->horarios;
+
+            $this->DisponibilidadActual($item);
+            $disponibilidad = $this->disponibilidad;
+
+           if(!empty($disponibilidad))
+           {
+                for($i = 0; $i<count($horarios); $i++)
+                {
+                    for($a = 0; $a<count($disponibilidad); $a++)
+                    {
+                        if($horarios[$i]['Horario'] == $disponibilidad[$a])
+                        {
+                            $horarios[$i]['estado'] = "OCUPADO";
+                        }
+                    }
+                }
+           }            
+            $mensaje->printJSON($horarios);
+        }
+
+        //consultar horarios
+        function obtenerHorarios()
+        {
+            $horario = new horarioReservacion();
+            $res = $horario->obtenerHorarios();
+            $horarios = array();
+
+            if($res->rowCount())
+            {
+                while($row = $res->fetch(PDO::FETCH_ASSOC))
+                {
+                    $item = array(
+                        'Horario'      =>$row['idHorarioReservacion'],
+                        'horaInicio'   =>$row['horaInicio'],
+                        'horaFin'      =>$row['horaFin'],
+                        'estado'       =>"DISPONIBLE"
+                    );
+                    array_push($horarios, $item);
+                }
+                $this->horarios = $horarios;
+            }
+        }
+
+        //Horarios que ya estan confirmadas las reservaciones
+        function DisponibilidadActual($item)
+        {
+            $reserva = new reservacion();
+
+            $res = $reserva->validarDisponibilidadActual($item);
+            $disponibilidad = array();
+
+            if($res->rowCount())
+            {
+                while($row = $res->fetch(PDO::FETCH_ASSOC))
+                {
+                    array_push($disponibilidad, $row['Horario']);
+                }
+            
+                $this->disponibilidad = $disponibilidad;
+            }
         }
 
     }

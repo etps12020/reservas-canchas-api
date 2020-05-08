@@ -10,7 +10,7 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        $fechayHora = $api->obtenerFecha();
+        $fechayHora = $mensaje->obtenerFecha();
         $qr = "";
 
         $i = count($data);
@@ -22,7 +22,7 @@
             && isset($data['cancha']) && isset($data['tipo']))
             { 
                 $usuario = $api->obtenerIdUsuario($data['usuario']);
-                $fecha =  $api->formatFecha($data['fecha']);
+                $fecha =  $mensaje->formatFecha($data['fecha']);
                 $item = array(
                         'fechayhora'    =>$fechayHora, 
                         'fecha'         =>$fecha, 
@@ -48,7 +48,7 @@
             if(isset($data['fecha']) && isset($data['usuario']) && isset($data['hora']) 
             && isset($data['cancha']) && isset($data['tipo']))
            {
-                $fecha =  $api->formatFecha($data['fecha']);
+                $fecha =  $mensaje->formatFecha($data['fecha']);
 
                 $item = array(
                         'fechayhora'    =>$fechayHora, 
@@ -76,7 +76,7 @@
         if(isset($data['numReserva'])  && isset($data['usuario']) && isset($data['estado'])
             && isset($data['comentario']))
         {
-            $fechayHora = $api->obtenerFecha();
+            $fechayHora = $mensaje->obtenerFecha();
 
             $item = array(   
                 'numReserva'  =>$data['numReserva'], 
