@@ -13,6 +13,14 @@ class reservacion extends ConexionDB
         return $query;
     }
 
+    function validarDisponibilidadActual($item)
+    {
+        $query = $this->connect()->prepare('Call getAllDisponibilidadHorarios(:cancha, :fecha)');
+        $query->execute([ 'cancha'=>$item['cancha'], 'fecha'=>$item['fecha'] ]);
+
+        return $query;
+    }
+
     //insert usuario nivel 1 y 2
     function registrarReserva($reserva)
     {
@@ -80,12 +88,14 @@ class reservacion extends ConexionDB
         return $query;
     }
 
-    function validarDisponibilidadActual($item)
+    function ObtenerReservas($reserva)
     {
-        $query = $this->connect()->prepare('Call getAllDisponibilidadHorarios(:cancha, :fecha)');
-        $query->execute([ 'cancha'=>$item['cancha'], 'fecha'=>$item['fecha'] ]);
-
-        return $query;
+        $query = $this->connect()->prepare('Call getAllReservaciones(:usuario, :numReserva, :cancha, :fecha)');
+        $query->execute([   'usuario'       =>$reserva['usuario'],
+                            'numReserva'    =>$reserva['numReserva'],
+                            'cancha'        =>$reserva['cancha'],
+                            'fecha'         =>$reserva['fecha']
+                        ]);
     }
 
 }

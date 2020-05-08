@@ -11,8 +11,11 @@
             $perm = new permisos();
             $reserva = new reservacion();
             $mensaje = new Mensajes_JSON();
+
             //Agrega el estado por defecto a la reservacion
+            $item['fechayhora'] = $mensaje->obtenerFecha();
             $item['estado'] = 1;
+            $item['qr'] = "";
 
             //consultar el estado del usuario que solicita la reservacion
             $id = $item['usuario'];

@@ -5,13 +5,15 @@
     $mensaje = new Mensajes_JSON();
     $api = new ApiReservacion();
 
+    if($_SERVER['REQUEST_METHOD'] == 'GET')
+    {
+        $data = $mensaje->obtenerJSON();
+    }
+
     //insert
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
         $data = $mensaje->obtenerJSON();
-
-        $fechayHora = $mensaje->obtenerFecha();
-        $qr = "";
 
         $i = count($data);
 
@@ -23,8 +25,8 @@
             { 
                 $usuario = $api->obtenerIdUsuario($data['usuario']);
                 $fecha =  $mensaje->formatFecha($data['fecha']);
+
                 $item = array(
-                        'fechayhora'    =>$fechayHora, 
                         'fecha'         =>$fecha, 
                         'usuarioAd'     =>$data['usuarioAd'], 
                         'usuario'       =>$usuario, 
@@ -51,13 +53,11 @@
                 $fecha =  $mensaje->formatFecha($data['fecha']);
 
                 $item = array(
-                        'fechayhora'    =>$fechayHora, 
                         'fecha'         =>$fecha, 
                         'usuario'       =>$data['usuario'], 
                         'hora'          =>$data['hora'],
                         'cancha'        =>$data['cancha'], 
-                        'tipo'          =>$data['tipo'], 
-                        'qr'            =>$qr 
+                        'tipo'          =>$data['tipo']
                 );
                 $api->add($item);
             }
