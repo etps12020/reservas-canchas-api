@@ -18,7 +18,7 @@
             //validar solo un id numerico
             if(is_numeric($id))
             {
-                 $api->getById($id);
+                $api->getById($id);
                 exit;
             }
             else

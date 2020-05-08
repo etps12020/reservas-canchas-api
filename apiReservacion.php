@@ -1,11 +1,48 @@
 <?php
     include_once 'Permisos.php';
     include_once 'DBReservacion.php';
-    include_once 'DBHorarioReservacion.php';
+    include_once 'listarReservaciones.php';
     include_once 'Mensajes.php';
 
     class ApiReservacion                       
     {
+        //listar reservas segun su filtro
+        function getById($item)
+        {
+            $perm = new permisos();
+            $reserva = new reservacion();
+            $listar = new ListarReservaciones();
+            $mensaje = new Mensajes_JSON();
+
+            if($item['usuario'])
+            {
+                $res = $perm->getRolUsuario($id = $item['usuario']);
+                $row = $res->fetch(); 
+
+                $item['rol'] = $row['var'];
+                
+                $listar->listarReservasUsu($item);
+            }
+            else if($item['numReservacion'])
+            {
+                $listar->ConsultarReservacion($id = $item['numReservacion']);
+            }
+            else if($item['cancha'])
+            {
+                $listar->ConsultarReservacionCancha($id = $item['cancha']);
+            }
+            else if($item['fecha'])
+            {
+                $item['fecha'] = $mensaje->formatFecha($item['fecha']);
+                $listar->listarReservasFecha($item);
+            }
+            else
+            {
+                $listar->listarReservasFecha($item);
+            }
+        }
+
+        
         function add($item)
         {
             $perm = new permisos();
@@ -78,8 +115,7 @@
             $nuevoEstado = $item['estado'];
             
             //consultar el nivel de usuario que esta modificando el estado
-            $id = $item['usuario'];
-            $res = $perm->getRolUsuario($id);
+            $res = $perm->getRolUsuario($id = $item['usuario']);
             $row = $res->fetch(); 
             $rol = $row['var'];
 

@@ -88,14 +88,38 @@ class reservacion extends ConexionDB
         return $query;
     }
 
-    function ObtenerReservas($reserva)
+    function ObtenerReservasFecha($reserva)
     {
-        $query = $this->connect()->prepare('Call getAllReservaciones(:usuario, :numReserva, :cancha, :fecha)');
-        $query->execute([   'usuario'       =>$reserva['usuario'],
-                            'numReserva'    =>$reserva['numReserva'],
-                            'cancha'        =>$reserva['cancha'],
-                            'fecha'         =>$reserva['fecha']
+        $query = $this->connect()->prepare('Call getAllReservacionesFecha(:fecha)');
+        $query->execute([   'fecha' =>$reserva['fecha'] ]);
+
+        return $query;
+    }
+
+    function ObtenerReservasCancha($id)
+    {
+        $query = $this->connect()->prepare('Call getAllReservacionesCancha(:cancha)');
+        $query->execute([ 'cancha' =>$id ]);
+
+        return $query;
+    }
+
+    function ObtenerReservasUsu($reserva)
+    {
+        $query = $this->connect()->prepare('Call getAllReservacionesUsuario(:usu, :rol)');
+        $query->execute([   'usu'  =>$reserva['usuario'],
+                            'rol'  =>$reserva['rol']
                         ]);
+
+        return $query;
+    }
+
+    function SeguimientoRerserva($id)
+    {
+        $query = $this->connect()->prepare('Call getAllSeguimientoReserva(:num)');
+        $query->execute([ 'num'=>$id]);
+
+        return $query;
     }
 
 }

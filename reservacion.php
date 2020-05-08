@@ -8,6 +8,19 @@
     if($_SERVER['REQUEST_METHOD'] == 'GET')
     {
         $data = $mensaje->obtenerJSON();
+
+        if(!empty($data))
+        {
+            $api->getById($data);
+            exit;
+        }
+        else
+        {
+            $data = ['fecha' =>'0000-00-0'];
+            $api->getById($data);
+            exit;
+        }
+        
     }
 
     //insert
