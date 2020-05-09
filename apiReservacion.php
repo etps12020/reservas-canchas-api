@@ -52,7 +52,6 @@
             //Agrega el estado por defecto a la reservacion
             $item['fechayhora'] = $mensaje->obtenerFecha();
             $item['estado'] = 1;
-            $item['qr'] = "";
 
             //consultar el estado del usuario que solicita la reservacion
             $id = $item['usuario'];
@@ -61,10 +60,10 @@
 
             if ($row['estado'] == 1)
             {
-                $res = $reserva->validarDisponibilidad($item);
-                $row = $res->fetch();
-                //validar disponibilidad de cancha, fecha y hora            
-                if($row['var'] == 0)
+                $res = $reserva->consultarDisponibilidad($item);
+                $roll = $res->fetch();
+                //validar disponibilidad de cancha, fecha y hora         
+                if($roll['var'] == 0)
                 {
                     $res = $perm->validarFechaRol($item);
                     $row = $res->fetch();
@@ -75,12 +74,12 @@
                         if(array_key_exists('usuarioAd', $item))
                         {
                             $res = $reserva->registrarReserva($item);
-                            $mensaje->exito('Datos registrados ADMIN');
+                            $mensaje->exito('Reservacion registrada por Asistente');
                         }
                         else
                         {
                             $res = $reserva->nuevaReserva($item);
-                            $mensaje->exito('Datos registrados Usuario final');
+                            $mensaje->exito('Reservacion registrada por usuario');
                         }
                     }
                     else

@@ -4,15 +4,16 @@ include_once 'conexion.php';
 
 class reservacion extends ConexionDB
 {
-
-    function validarDisponibilidad($reserva)
+    //consultar horario a reservar
+    function consultarDisponibilidad($reserva)
     {
         $query = $this->connect()->prepare('Call getDisponibilidadReserva(:fecha, :hora, :cancha)');
-        $query->execute(['fecha'=>$reserva['fecha'], 'hora'=>$reserva['hora'], 'cancha'=>$reserva['cancha']]);
+        $query->execute([ 'fecha'=>$reserva['fecha'], 'hora'=>$reserva['hora'], 'cancha'=>$reserva['cancha']  ]);
 
         return $query;
     }
 
+    //para generar horarios disponibles por fecha
     function validarDisponibilidadActual($item)
     {
         $query = $this->connect()->prepare('Call getAllDisponibilidadHorarios(:cancha, :fecha)');
@@ -21,12 +22,12 @@ class reservacion extends ConexionDB
         return $query;
     }
 
-    //insert usuario nivel 1 y 2
+    //insert reserva por llamada
     function registrarReserva($reserva)
     {
         
         $query = $this->connect()->prepare('Call InsertReservacionAdmin 
-        (:fechayhora, :fecha, :usuarioAd, :usuario, :hora, :cancha, :estado, :tipo, :qr)');
+        (:fechayhora, :fecha, :usuarioAd, :usuario, :hora, :cancha, :estado, :tipo)');
 
         $query->execute([   'fechayhora'    =>$reserva['fechayhora'], 
                             'fecha'         =>$reserva['fecha'], 
@@ -35,16 +36,15 @@ class reservacion extends ConexionDB
                             'hora'          =>$reserva['hora'],
                             'cancha'        =>$reserva['cancha'], 
                             'estado'        =>$reserva['estado'], 
-                            'tipo'          =>$reserva['tipo'], 
-                            'qr'            =>$reserva['qr'] 
+                            'tipo'          =>$reserva['tipo']
                         ]);
         return $query;
     }
 
-    //insert usuario final
+    //insert usuario por app
     function nuevaReserva($reserva)
     {
-        $query = $this->connect()->prepare('Call InsertReservacion(:fechayhora, :fecha, :usuario, :hora, :cancha, :estado, :tipo, :qr)');
+        $query = $this->connect()->prepare('Call InsertReservacion(:fechayhora, :fecha, :usuario, :hora, :cancha, :estado, :tipo)');
 
         $query->execute([   'fechayhora'    =>$reserva['fechayhora'], 
                             'fecha'         =>$reserva['fecha'],
@@ -52,8 +52,7 @@ class reservacion extends ConexionDB
                             'hora'          =>$reserva['hora'],
                             'cancha'        =>$reserva['cancha'], 
                             'estado'        =>$reserva['estado'], 
-                            'tipo'          =>$reserva['tipo'], 
-                            'qr'            =>$reserva['qr'] 
+                            'tipo'          =>$reserva['tipo']
                         ]);
         return $query;
     }

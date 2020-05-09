@@ -3,17 +3,17 @@
     {
         function printJSON($array)
         {
-            echo '<code>' . json_encode($array) .'</code>';
+            echo  json_encode($array) ;
         }
 
         function error($mensaje)
         {
-            echo '<code>' . json_encode(array('mensaje' => $mensaje)) . '</code>';
+            echo  json_encode(array('mensaje' => $mensaje)) ;
         }
 
         function exito($mensaje)
         {
-            echo '<code>' . json_encode(array('mensaje' => $mensaje)) . '</code>';
+            echo json_encode(array('mensaje' => $mensaje));
         }
 
         function obtenerJSON()
