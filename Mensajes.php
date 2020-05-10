@@ -18,7 +18,7 @@
 
         function obtenerJSON()
         {
-            $decode = json_decode(file_get_contents('php://input'), true);
+            $decode = $_GET;
             return $this->decode = $decode;
         }
 
