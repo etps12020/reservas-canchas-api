@@ -24,8 +24,8 @@ class permisos extends ConexionDB
 
     function getIdUsuario($usu)
     {
-        $query = $this->connect()->prepare('SELECT idUsuario AS id FROM usuario WHERE usuario = :usuario');
-        $query->execute(['usuario'=>$usu]);
+        $query = $this->connect()->prepare('SELECT idUsuario AS id FROM usuario WHERE dui = :dui');
+        $query->execute(['dui'=>$usu]);
         return $query;
     }
 

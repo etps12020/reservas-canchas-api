@@ -36,13 +36,6 @@
             }
             return $this->date =$date;
         }
-
-        //obtener fecha actual
-        function obtenerFecha()
-        {
-            $date = date('Y-m-d h:i:s', time());
-            return $this->date = $date;
-        }
-        
+ 
     }
 ?>

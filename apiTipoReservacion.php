@@ -45,9 +45,11 @@
             //creo un objeto de la clase estadoUsuaario, donde esta la consulta
             $mensaje = new Mensajes_JSON();
             $tipo = new tipoReservacion();
+            $item = ['id'=>$id, 'accion'=>'buscar'];
+
             $tipos = array();
 
-            $res = $tipo->obtenerTipoReserva($id);
+            $res = $tipo->obtenerTipoReserva($item);
  
             if($res->rowCount() == 1)
             {
@@ -105,7 +107,8 @@
             //si la consulta retorna 0 se procede a eliminar sino muestra el mensaje de error
             if($row['cantidad'] == 0)
             {
-                $res = $tipo->eliminarTipoReserva($id);
+                $item = ['id'=>$id, 'accion'=>'eliminar'];
+                $res = $tipo->eliminarTipoReserva($item);
                 $mensaje->exito('Datos eliminados con exito');
             }
             else

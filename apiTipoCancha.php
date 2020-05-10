@@ -1,8 +1,8 @@
 <?php
-    include_once 'DBEstadoReservacion.php';
+    include_once 'DBTipoCancha.php';
     include_once 'Mensajes.php';
-    
-    class ApiEstadosReservacion                        
+
+    class ApiTipoCanchas                       
     {
 
         //lista todos los datos
@@ -10,24 +10,24 @@
         {
             $mensaje = new Mensajes_JSON();
             
-            //creo un objeto de la clase estadoEdificio, donde esta la consulta
-            $estado = new estadoReservacion();
-            $estados = array();
+            //creo un objeto de la clase tipoCancha, donde esta la consulta
+            $tipo = new TipoCancha();
+            $tipos 	= array();
 
-            $res = $estado->obtenerEstados();
+            $res = $tipo->obtenerTipoCancha();
 
             if($res->rowCount())
             {
                 while($row = $res->fetch(PDO::FETCH_ASSOC))
                 {
                     $item = array(
-                        'id'              =>$row['idEstado'],
-                        'estado'          =>$row['estado']
+                        'id'              =>$row['idTipoCancha'],
+                        'tipo'            =>$row['tipo']
                     );
-                    array_push($estados, $item);
+                    array_push($tipos, $item);
                 }
                 header("HTTP/1.1 200 OK");
-                $mensaje->printJSON($estados);
+                $mensaje->printJSON($tipos);
             }
             else
             {
@@ -41,27 +41,26 @@
         function getById($id)
         {
             
-            //creo un objeto de la clase estadoEdificio, donde esta la consulta
+            //creo un objeto de la clase tipoCancha, donde esta la consulta
             $mensaje = new Mensajes_JSON();
-            $estado = new estadoReservacion();
-
+            $tipo 	 = new TipoCancha();
+            $tipos 	 = array();
             $item = ['id'=>$id, 'accion'=>'buscar', 'var'=>'null'];
-            $estados = array();
 
-            $res = $estado->obtenerEstado($item);
+            $res = $tipo->obtenerTipoCanchas($item);
  
             if($res->rowCount() == 1)
             {
                 $row = $res->fetch();
 
                 $item = array(
-                    'id'      =>$row['idEstado'],
-                    'estado'  =>$row['estado']
+                    'id'      =>$row['idTipoCancha'],
+                    'tipo'    =>$row['tipo']
                 );
-                array_push($estados, $item);
+                array_push($tipos, $item);
                 
                 header("HTTP/1.1 200 OK");
-                $mensaje->printJSON($estados);
+                $mensaje->printJSON($tipos);
             }
             else
             {
@@ -69,48 +68,47 @@
             }
         }
 
-        //registrar nuevo estado
+        //registrar nuevo tipoCancha
         function add($item)
         {
-            $estado = new estadoReservacion();
-            $item = ['id'=>0, 'accion'=>'insertar', 'estado'=>$item['estado']];
-
-            $res = $estado->nuevoEstado($item);
+            $tipo = new TipoCancha();
+            $item = ['id'=>0, 'accion'=>'insertar', 'tipo'=>$item['tipo']];
+            $res  = $tipo->nuevoTipoCancha($item);
 
             //imprimir mensajes
             $mensaje = new Mensajes_JSON();
             $mensaje->exito('Datos registrados');
         }
 
-        //actualizar estado
+        //actualizar tipoCancha
         function update($item)
         {
            
-            $estado = new estadoReservacion();
+            $tipo = new TipoCancha();
             $item['accion'] = "update";
 
-            $res = $estado->actualizarEstado($item);
+            $res  = $tipo->actualizarTipoCancha($item);
             
             //imprimir mensajes
             $mensaje = new Mensajes_JSON();
             $mensaje->exito('Datos actualizados');
         }
 
-        //eliminar estado
+        //eliminar tipoCancha
         function delete($id)
         {
             $mensaje = new Mensajes_JSON();
-            $estado = new estadoReservacion();
+            $tipo = new TipoCancha();
 
             //se realiza una consulta previa validando que el ID no este siendo utilizado en otra tabla
-            $res = $estado->validarEstadoID($id);
+            $res = $tipo->validarTipoCancha($id);
             
             $row = $res->fetch();
             //si la consulta retorna 0 se procede a eliminar sino muestra el mensaje de error
             if($row['cantidad'] == 0)
             {
                 $item = ['id'=>$id, 'accion'=>'eliminar', 'var'=>'null'];
-                $res = $estado->eliminarEstado($item);
+                $res = $tipo->eliminarTipoCancha($item);
                 $mensaje->exito('Datos eliminados con exito');
             }
             else

@@ -49,13 +49,15 @@
             $reserva = new reservacion();
             $mensaje = new Mensajes_JSON();
 
+            //modificar el formato de la fecha
+            $fecha =  $mensaje->formatFecha($item['fecha']);
+            $item['fecha'] = $fecha;
+
             //Agrega el estado por defecto a la reservacion
-            $item['fechayhora'] = $mensaje->obtenerFecha();
             $item['estado'] = 1;
 
             //consultar el estado del usuario que solicita la reservacion
-            $id = $item['usuario'];
-            $res = $perm->getEstadoUsuario($id);
+            $res = $perm->getEstadoUsuario($item['usuario']);
             $row = $res->fetch(); 
 
             if ($row['estado'] == 1)

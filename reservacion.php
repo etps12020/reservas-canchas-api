@@ -33,23 +33,13 @@
         //reservacion administrativa
         if($i == 6)
         {
-            if(isset($data['fecha']) && isset($data['usuarioAd']) && isset($data['usuario']) && isset($data['hora']) 
+            if(isset($data['fecha']) && isset($data['usuarioAd']) && isset($data['dui']) && isset($data['hora']) 
             && isset($data['cancha']) && isset($data['tipo']))
             { 
-                $usuario = $api->obtenerIdUsuario($data['usuario']);
-                $fecha =  $mensaje->formatFecha($data['fecha']);
-
-                $item = array(
-                        'fecha'         =>$fecha, 
-                        'usuarioAd'     =>$data['usuarioAd'], 
-                        'usuario'       =>$usuario, 
-                        'hora'          =>$data['hora'],
-                        'cancha'        =>$data['cancha'], 
-                        'tipo'          =>$data['tipo'], 
-                        'qr'            =>$qr 
-                );
-                $api->add($item);
+                $usuario = $api->obtenerIdUsuario($data['dui']);
+                $data['usuario'] = $usuario;
                 
+                $api->add($data);
             }
             else
             {   
@@ -62,17 +52,8 @@
         {
             if(isset($data['fecha']) && isset($data['usuario']) && isset($data['hora']) 
             && isset($data['cancha']) && isset($data['tipo']))
-           {
-                $fecha =  $mensaje->formatFecha($data['fecha']);
-
-                $item = array(
-                        'fecha'         =>$fecha, 
-                        'usuario'       =>$data['usuario'], 
-                        'hora'          =>$data['hora'],
-                        'cancha'        =>$data['cancha'], 
-                        'tipo'          =>$data['tipo']
-                );
-                $api->add($item);
+            {
+                $api->add($data);
             }
             else
             {   
@@ -89,17 +70,7 @@
         if(isset($data['numReserva'])  && isset($data['usuario']) && isset($data['estado'])
             && isset($data['comentario']))
         {
-            $fechayHora = $mensaje->obtenerFecha();
-
-            $item = array(   
-                'numReserva'  =>$data['numReserva'], 
-                'usuario'     =>$data['usuario'], 
-                'estado'      =>$data['estado'],
-                'comentario'  =>$data['comentario'],
-                'fechayhora'  =>$fechayHora
-            );
-            $api->update($item);
-
+            $api->update($data);
         }
         else
         {

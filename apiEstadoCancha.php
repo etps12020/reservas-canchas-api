@@ -1,8 +1,9 @@
 <?php
-    include_once 'DBEstadoReservacion.php';
+
+    include_once 'DBEstadoCancha.php';
     include_once 'Mensajes.php';
-    
-    class ApiEstadosReservacion                        
+
+    class ApiEstadosCancha                      
     {
 
         //lista todos los datos
@@ -10,8 +11,8 @@
         {
             $mensaje = new Mensajes_JSON();
             
-            //creo un objeto de la clase estadoEdificio, donde esta la consulta
-            $estado = new estadoReservacion();
+            //creo un objeto de la clase estadoUsuaario, donde esta la consulta
+           $estado = new estadoCancha();
             $estados = array();
 
             $res = $estado->obtenerEstados();
@@ -21,8 +22,8 @@
                 while($row = $res->fetch(PDO::FETCH_ASSOC))
                 {
                     $item = array(
-                        'id'              =>$row['idEstado'],
-                        'estado'          =>$row['estado']
+                        'id'        =>$row['idEstado'],
+                        'estado'    =>$row['estado']
                     );
                     array_push($estados, $item);
                 }
@@ -40,15 +41,15 @@
         //consulta solo el id solicitado
         function getById($id)
         {
-            
-            //creo un objeto de la clase estadoEdificio, donde esta la consulta
-            $mensaje = new Mensajes_JSON();
-            $estado = new estadoReservacion();
 
-            $item = ['id'=>$id, 'accion'=>'buscar', 'var'=>'null'];
+            //creo un objeto de la clase estadoUsuaario, donde esta la consulta
+            $mensaje = new Mensajes_JSON();
+            $estado = new estadoCancha();
+            
             $estados = array();
 
-            $res = $estado->obtenerEstado($item);
+            $item = ['id'=>$id, 'accion'=>'buscar', 'var'=>'null'];
+            $res = $estado->obtenerEstadobyId($item);
  
             if($res->rowCount() == 1)
             {
@@ -59,8 +60,7 @@
                     'estado'  =>$row['estado']
                 );
                 array_push($estados, $item);
-                
-                header("HTTP/1.1 200 OK");
+
                 $mensaje->printJSON($estados);
             }
             else
@@ -72,9 +72,8 @@
         //registrar nuevo estado
         function add($item)
         {
-            $estado = new estadoReservacion();
+            $estado = new estadoCancha();
             $item = ['id'=>0, 'accion'=>'insertar', 'estado'=>$item['estado']];
-
             $res = $estado->nuevoEstado($item);
 
             //imprimir mensajes
@@ -85,10 +84,8 @@
         //actualizar estado
         function update($item)
         {
-           
-            $estado = new estadoReservacion();
+            $estado = new estadoCancha();
             $item['accion'] = "update";
-
             $res = $estado->actualizarEstado($item);
             
             //imprimir mensajes
@@ -100,7 +97,7 @@
         function delete($id)
         {
             $mensaje = new Mensajes_JSON();
-            $estado = new estadoReservacion();
+            $estado = new estadoCancha();
 
             //se realiza una consulta previa validando que el ID no este siendo utilizado en otra tabla
             $res = $estado->validarEstadoID($id);

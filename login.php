@@ -5,19 +5,14 @@
     $mensaje = new Mensajes_JSON();
     $api = new ApiUsuarios();
 
-    //peticion get para listar todos los datos o solo el ID requerido
+    //peticion get para loguear usuario
     if ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
         $data = $mensaje->obtenerJSON();
 
         if(isset($data['usuario']) && isset($data['password']))
         {
-            $item = array
-            (
-                'usuario'   =>$data['usuario'],
-                'password'  =>$data['password']
-            );
-            $api->getAllUser($item);
+           $api->getAllUser($data);
         }
         else
         {

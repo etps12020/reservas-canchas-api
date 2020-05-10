@@ -6,7 +6,6 @@ class usuario extends ConexionDB
 {
     //consulta para listar todos los datos
     function obtenerUsuarios()
-    
     {
         $id=0;
         $accion = "listar";
@@ -30,26 +29,27 @@ class usuario extends ConexionDB
     //$estado es array de objetos que traera los datos a insertar
     function nuevoUsuario($usuario)
     {
-        $query = $this->connect()->prepare('Call InsertUsuario(:usuario, :nombre, :carnet, :correo, :telefono, :password, :rol, :estado, :fecha)');
+        $query = $this->connect()->prepare('Call InsertUsuario(:usuario, :nombre, :dui, :carnet, :correo, :telefono, :password, :rol, :estado)');
         $query->execute([   'usuario'   =>$usuario['usuario'], 
-                            'nombre'    =>$usuario['nombre'], 
+                            'nombre'    =>$usuario['nombre'],
+                            'dui'       =>$usuario['dui'], 
                             'carnet'    =>$usuario['carnet'], 
                             'correo'    =>$usuario['correo'], 
                             'telefono'  =>$usuario['telefono'], 
                             'password'  =>$usuario['password'],
                             'rol'       =>$usuario['rol'], 
-                            'estado'    =>$usuario['estado'], 
-                            'fecha'     =>$usuario['fecha']  
+                            'estado'    =>$usuario['estado']
                         ]);
         return $query;
     }
 
     function actualizarUsuario($usuario)
     {
-        $query = $this->connect()->prepare('Call UpdateUsuario(:id, :nombre, :carnet, :correo, :telefono, :password, :rol, :estado)');
+        $query = $this->connect()->prepare('Call UpdateUsuario(:id, :nombre, :carnet, :dui, :correo, :telefono, :password, :rol, :estado)');
         $query->execute([   'id'        =>$usuario['id'], 
                             'nombre'    =>$usuario['nombre'], 
-                            'carnet'    =>$usuario['carnet'], 
+                            'carnet'    =>$usuario['carnet'],
+                            'dui'       =>$usuario['dui'], 
                             'correo'    =>$usuario['correo'], 
                             'telefono'  =>$usuario['telefono'], 
                             'password'  =>$usuario['password'],

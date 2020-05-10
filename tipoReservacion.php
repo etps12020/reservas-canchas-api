@@ -17,7 +17,7 @@
             //validar solo un id numerico
             if(is_numeric($id))
             {
-                 $api->getById($id);
+                $api->getById($id);
                 exit;
             }
             else
@@ -41,12 +41,7 @@
 
         if(isset($data['tipo']) && isset($data['descripcion']))
         {
-            $item = array(
-            'tipo'          =>$data['tipo'],
-            'descripcion'   =>$data['descripcion']
-            );
-
-            $api->add($item);
+            $api->add($data);
         }
         else
         {   
@@ -60,14 +55,8 @@
         $data = $mensaje->obtenerJSON();
 
         if(isset($data['id']) && isset($data['tipo']) && isset($data['descripcion']))
-        {
-            $item = array(
-                'id'            =>$data['id'],
-                'tipo'          =>$data['tipo'],
-                'descripcion'   =>$data['descripcion']
-            );
-            
-            $api->update($item);
+        {   
+            $api->update($data);
         }
         else
         {
@@ -84,7 +73,15 @@
         if(isset($data['id']))
         {
             $id = $data['id'];
-            $api->delete($id);
+            
+            if(is_numeric($id))
+            {
+                $api->delete($id);
+            }
+            else
+            {
+                $mensaje->error('Los parametros son incorrectos'); 
+            }
         }
         else
         {

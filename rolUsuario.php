@@ -39,13 +39,9 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['rol']))
+        if(isset($data['rol']) && is_string($data['rol']))
         {
-            $item = array(
-            'rol' =>$data['rol']
-        );
-
-            $api->add($item);
+            $api->add($data);
         }
         else
         {   
@@ -61,12 +57,7 @@
 
         if(isset($data['id']) && isset($data['rol']))
         {
-            $item = array
-            (
-                'id'  =>$data['id'],
-                'rol' =>$data['rol']
-            );
-            $api->update($item);
+            $api->update($data);
         }
         else
         {
@@ -83,7 +74,15 @@
         if(isset($data['id']))
         {
             $id = $data['id'];
-            $api->delete($id);
+            
+            if(is_numeric($id))
+            {
+                $api->delete($id);
+            }
+            else
+            {
+                $mensaje->error('Los parametros son incorrectos'); 
+            }
         }
         else
         {

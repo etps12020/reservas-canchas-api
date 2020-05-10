@@ -17,13 +17,10 @@ class rolUsuario extends ConexionDB
     }
 
     //se realiza la consulta en base al id solicitado
-    function obtenerRol($id)
+    function obtenerRol($rol)
     {
-        $accion = "buscar";
-        $var = "null";
-        
         $query = $this->connect()->prepare('Call getAllRolUsuario(:id, :accion, :var)');
-        $query->execute(['id'=>$id, 'accion'=>$accion, 'var'=>$var]);
+        $query->execute(['id'=>$rol['id'], 'accion'=>$rol['accion'], 'var'=>$rol['var']]);
 
         return $query;
     }
@@ -31,11 +28,8 @@ class rolUsuario extends ConexionDB
     //$rol es array de objetos que traera los datos a insertar
     function nuevoRol($rol)
     {
-        $id = 0;
-        $accion = "insertar";
-
         $query = $this->connect()->prepare('Call getAllRolUsuario(:id, :accion, :rol)');
-        $query->execute(['id'=>$id, 'accion' =>$accion, 'rol'=>$rol['rol']]);
+        $query->execute(['id'=>$rol['id'], 'accion'=>$rol['accion'], 'rol'=>$rol['rol']]);
 
         return $query;
     }
@@ -43,10 +37,9 @@ class rolUsuario extends ConexionDB
     //consulta update
     function actualizarRol($rol)
     {
-        $accion = "update";
-        
+
         $query = $this->connect()->prepare('Call getAllRolUsuario(:id, :accion, :rol)');
-        $query->execute(['id' => $rol['id'], 'accion'=>$accion, 'rol'=>$rol['rol']]);
+        $query->execute(['id'=>$rol['id'], 'accion'=>$rol['accion'], 'rol'=>$rol['rol']]);
 
         return $query;
      }
@@ -64,13 +57,10 @@ class rolUsuario extends ConexionDB
      }
 
      //una ves se ha validado que no el ID no esta siendo utilizado
-     function eliminarRol($id)
+     function eliminarRol($rol)
      {
-        $accion = "eliminar";
-        $var = "null";
-        
         $query = $this->connect()->prepare('Call getAllRolUsuario(:id, :accion, :var)');
-        $query->execute(['id'=>$id, 'accion'=>$accion, 'var'=>$var]);
+        $query->execute(['id'=>$rol['id'], 'accion'=>$rol['accion'], 'var'=>$rol['var']]);
 
          return $query;
 

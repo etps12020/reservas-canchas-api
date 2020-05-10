@@ -1,7 +1,7 @@
 <?php
     include_once 'DBEstadoUsuario.php';
     include_once 'Mensajes.php';
-
+    
     class ApiEstadosUsuarios                        
     {
 
@@ -10,7 +10,7 @@
         {
             $mensaje = new Mensajes_JSON();
             
-            //creo un objeto de la clase estadoUsuaario, donde esta la consulta
+            //creo un objeto de la clase estadoEdificio, donde esta la consulta
             $estado = new estadoUsuario();
             $estados = array();
 
@@ -41,11 +41,14 @@
         function getById($id)
         {
             
-            //creo un objeto de la clase estadoUsuaario, donde esta la consulta
+            //creo un objeto de la clase estadoEdificio, donde esta la consulta
             $mensaje = new Mensajes_JSON();
             $estado = new estadoUsuario();
+
+            $item = ['id'=>$id, 'accion'=>'buscar', 'var'=>'null'];
             $estados = array();
-            $res = $estado->obtenerEstado($id);
+
+            $res = $estado->obtenerEstado($item);
  
             if($res->rowCount() == 1)
             {
@@ -70,6 +73,8 @@
         function add($item)
         {
             $estado = new estadoUsuario();
+            $item = ['id'=>0, 'accion'=>'insertar', 'estado'=>$item['estado']];
+
             $res = $estado->nuevoEstado($item);
 
             //imprimir mensajes
@@ -82,6 +87,8 @@
         {
            
             $estado = new estadoUsuario();
+            $item['accion'] = "update";
+
             $res = $estado->actualizarEstado($item);
             
             //imprimir mensajes
@@ -102,7 +109,8 @@
             //si la consulta retorna 0 se procede a eliminar sino muestra el mensaje de error
             if($row['cantidad'] == 0)
             {
-                $res = $estado->eliminarEstado($id);
+                $item = ['id'=>$id, 'accion'=>'eliminar', 'var'=>'null'];
+                $res = $estado->eliminarEstado($item);
                 $mensaje->exito('Datos eliminados con exito');
             }
             else

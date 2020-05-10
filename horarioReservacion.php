@@ -40,12 +40,7 @@
 
         if(isset($data['horaInicio']) && isset($data['horaFin']))
         {
-            $item = array(
-            'horaInicio' =>$data['horaInicio'],
-            'horaFin'    =>$data['horaFin']
-            );
-
-            $api->add($item);
+            $api->add($data);
         }
         else
         {   
@@ -60,13 +55,7 @@
 
         if(isset($data['id']) && isset($data['horaInicio']) && isset($data['horaFin']))
         {
-            $item = array(
-                'id'         =>$data['id'],
-                'horaInicio' =>$data['horaInicio'],
-                'horaFin'    =>$data['horaFin']
-            );
-            
-            $api->update($item);
+            $api->update($data);
         }
         else
         {
@@ -82,8 +71,14 @@
      
         if(isset($data['id']))
         {
-            $id = $data['id'];
-            $api->delete($id);
+            if(is_numeric($id))
+            {
+                $api->delete($id);
+            }
+            else
+            {
+                $mensaje->error('Los parametros son incorrectos'); 
+            }
         }
         else
         {

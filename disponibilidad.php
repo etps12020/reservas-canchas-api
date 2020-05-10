@@ -12,20 +12,13 @@
      
         if(isset($data['cancha']) && isset($data['fecha']))
         {
-            $fecha =  $mensaje->formatFecha($data['fecha']);
-
-            $item = array
-            (
-                'cancha' =>$data['cancha'],
-                'fecha'  =>$fecha
-            );
-            $api->GenerarDisponibilidad($item);
+            
+            $api->GenerarDisponibilidad($data);
             
         }
         else
         {
-            $mensaje->error('No hay datos');
-            header("HTTP/1.1 400 Bad Request");
+            $mensaje->error('Datos incorrectos');
         }
     }
 ?>

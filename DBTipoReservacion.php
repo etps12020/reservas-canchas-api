@@ -16,12 +16,11 @@
         }
 
         //se realiza la consulta en base al id solicitado
-        function obtenerTipoReserva($id)
+        function obtenerTipoReserva($tipo)
         {
-            $accion = "buscar";
-           
+
             $query = $this->connect()->prepare('Call getAllTipoReservacion(:id, :accion)');
-            $query->execute(['id'=>$id, 'accion'=>$accion]);
+            $query->execute([ 'id'=>$tipo['id'], 'accion'=>$tipo['accion'] ]);
 
             return $query;
         }
@@ -60,12 +59,10 @@
          }
 
          //una ves se ha validado que no el ID no esta siendo utilizado
-         function eliminarTipoReserva($id)
+         function eliminarTipoReserva($tipo)
          {
-            $accion = "eliminar";
-
             $query = $this->connect()->prepare('Call getAllTipoReservacion(:id, :accion)');
-            $query->execute(['id' =>$id, 'accion' =>$accion]);
+            $query->execute([ 'id'=>$tipo['id'], 'accion'=>$tipo['accion'] ]);
 
              return $query;
     

@@ -22,9 +22,9 @@
                 while($row = $res->fetch(PDO::FETCH_ASSOC))
                 {
                     $item = array(
-                        'id'            =>$row['idHorarioReservacion'],
+                        'id'           =>$row['idHorarioReservacion'],
                         'horaInicio'   =>$row['horaInicio'],
-                        'horaFin'       =>$row['horaFin']
+                        'horaFin'      =>$row['horaFin']
                     );
                     array_push($horarios, $item);
                 }
@@ -120,14 +120,17 @@
         {
             $mensaje = new Mensajes_JSON();
 
+            $fecha =  $mensaje->formatFecha($item['fecha']);
+            $item['fecha'] = $fecha;
+
             $this->obtenerHorarios();
             $horarios = $this->horarios;
 
             $this->DisponibilidadActual($item);
             $disponibilidad = $this->disponibilidad;
 
-           if(!empty($disponibilidad))
-           {
+            if(!empty($disponibilidad))
+            {
                 for($i = 0; $i<count($horarios); $i++)
                 {
                     for($a = 0; $a<count($disponibilidad); $a++)
@@ -138,7 +141,7 @@
                         }
                     }
                 }
-           }            
+            }            
             $mensaje->printJSON($horarios);
         }
 

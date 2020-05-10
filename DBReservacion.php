@@ -27,10 +27,9 @@ class reservacion extends ConexionDB
     {
         
         $query = $this->connect()->prepare('Call InsertReservacionAdmin 
-        (:fechayhora, :fecha, :usuarioAd, :usuario, :hora, :cancha, :estado, :tipo)');
+        (:fecha, :usuarioAd, :usuario, :hora, :cancha, :estado, :tipo)');
 
-        $query->execute([   'fechayhora'    =>$reserva['fechayhora'], 
-                            'fecha'         =>$reserva['fecha'], 
+        $query->execute([   'fecha'         =>$reserva['fecha'], 
                             'usuarioAd'     =>$reserva['usuarioAd'],
                             'usuario'       =>$reserva['usuario'], 
                             'hora'          =>$reserva['hora'],
@@ -44,10 +43,9 @@ class reservacion extends ConexionDB
     //insert usuario por app
     function nuevaReserva($reserva)
     {
-        $query = $this->connect()->prepare('Call InsertReservacion(:fechayhora, :fecha, :usuario, :hora, :cancha, :estado, :tipo)');
+        $query = $this->connect()->prepare('Call InsertReservacion(:fecha, :usuario, :hora, :cancha, :estado, :tipo)');
 
-        $query->execute([   'fechayhora'    =>$reserva['fechayhora'], 
-                            'fecha'         =>$reserva['fecha'],
+        $query->execute([   'fecha'         =>$reserva['fecha'],
                             'usuario'       =>$reserva['usuario'], 
                             'hora'          =>$reserva['hora'],
                             'cancha'        =>$reserva['cancha'], 
@@ -76,12 +74,11 @@ class reservacion extends ConexionDB
     function UpdateReserva($reserva)
     {
 
-        $query = $this->connect()->prepare('Call SetUpdateReserva(:id, :usuario, :estado, :comentario, :fechayhora)');
+        $query = $this->connect()->prepare('Call UpdateReservacion(:id, :usuario, :estado, :comentario)');
         $query->execute([   'id'          =>$reserva['id'],  
                             'usuario'     =>$reserva['usuario'], 
                             'estado'      =>$reserva['estado'],
                             'comentario'  =>$reserva['comentario'],
-                            'fechayhora'  =>$reserva['fechayhora']
                         ]);        
 
         return $query;

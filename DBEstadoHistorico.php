@@ -17,13 +17,11 @@
         }
 
         //se realiza la consulta en base al id solicitado
-        function obtenerEstado($id)
+        function obtenerEstado($estado)
         {
-            $accion = "buscar";
-            $var = "null";
-           
+
             $query = $this->connect()->prepare('Call getAllEstadoHistorico(:id, :accion, :var)');
-            $query->execute(['id'=>$id, 'accion'=>$accion, 'var'=>$var]);
+            $query->execute(['id'=>$estado['id'], 'accion'=>$estado['accion'], 'var'=>$estado['var']]);
 
             return $query;
         }
@@ -31,11 +29,9 @@
         //$estado es array de objetos que traera los datos a insertar
         function nuevoEstado($estado)
         {
-            $id = 0;
-            $accion = "insertar";
 
             $query = $this->connect()->prepare('Call getAllEstadoHistorico(:id, :accion, :estado)');
-            $query->execute(['id'=>$id, 'accion' =>$accion, 'estado'=>$estado['estado']]);
+            $query->execute(['id'=>$estado['id'], 'accion'=>$estado['accion'], 'estado'=>$estado['estado']]);
 
             return $query;
         }
@@ -43,8 +39,6 @@
         //consulta update
         function actualizarEstado($estado)
          {
-            $accion = "update";
-           
             $query = $this->connect()->prepare('Call getAllEstadoHistorico(:id, :accion, :estado)');
             $query->execute(['id'=>$estado['id'], 'accion' =>$accion, 'estado'=>$estado['estado']]);
 
@@ -65,13 +59,11 @@
          }
 
          //una ves se ha validado que no el ID no esta siendo utilizado
-         function eliminarEstado($id)
+         function eliminarEstado($estado)
          {
-            $accion = "eliminar";
-            $var = "null";
-            
+ 
             $query = $this->connect()->prepare('Call getAllEstadoHistorico(:id, :accion, :var)');
-            $query->execute(['id' =>$id, 'accion' =>$accion, 'var'=>$var]);
+            $query->execute(['id'=>$estado['id'], 'accion'=>$estado['accion'], 'var'=>$estado['var']]);
 
              return $query;
     

@@ -44,9 +44,10 @@
             //creo un objeto de la clase rolUsuario, donde esta la consulta
             $mensaje = new Mensajes_JSON();
             $rol = new rolUsuario();
+            $item = ['id'=>$id, 'accion'=>'buscar', 'var'=>'null'];
             $roles = array();
 
-            $res = $rol->obtenerRol($id);
+            $res = $rol->obtenerRol($item);
  
             if($res->rowCount() == 1)
             {
@@ -71,6 +72,7 @@
         function add($item)
         {
             $rol = new rolUsuario();
+            $item = ['id'=>0, 'accion'=>'insertar', 'rol'=>$item['rol']];
             $res = $rol->nuevoRol($item);
 
             //imprimir mensajes
@@ -81,8 +83,9 @@
         //actualizar estado
         function update($item)
         {
-           
             $rol = new rolUsuario();
+            $item['accion'] = "update";
+
             $res = $rol->actualizarRol($item);
             
             //imprimir mensajes
@@ -103,7 +106,8 @@
             //si la consulta retorna 0 se procede a eliminar sino muestra el mensaje de error
             if($row['cantidad'] == 0)
             {
-                $res = $rol->eliminarRol($id);
+                $item = ['id'=>$id, 'accion'=>'eliminar', 'var'=>'null'];
+                $res = $rol->eliminarRol($item);
                 $mensaje->exito('Datos eliminados con exito');
             }
             else
