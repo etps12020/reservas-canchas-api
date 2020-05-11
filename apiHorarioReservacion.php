@@ -6,6 +6,7 @@
     class ApiHorariosReservacion                        
     {
 
+        private $disponibilidad;
         //lista todos los datos
         function getAll()
         {

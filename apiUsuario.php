@@ -26,7 +26,7 @@
                         'usuario'       =>$row['usuario'],
                         'dui'           =>$row['dui'],
                         'carnet'        =>$row['carnet'],
-                        'correo'        =>$row['correo'],
+                        'correo'        =>$row['correo'],                        
                         'telefono'      =>$row['telefono'],
                         'password'      =>$row['password'],
                         'rol'           =>$row['rol'],
@@ -69,7 +69,9 @@
                     'correo'        =>$row['correo'],
                     'telefono'      =>$row['telefono'],
                     'password'      =>$row['password'],
+                    'idRol'         =>$row['idRol'],
                     'rol'           =>$row['rol'],
+                    'idRol'         =>$row['idRol'],
                     'estado'        =>$row['estado'],
                     'fechaCreacion' =>$row['fechaCreacion']
                 );

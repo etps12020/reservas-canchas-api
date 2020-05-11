@@ -14,7 +14,7 @@
             $listar = new ListarReservaciones();
             $mensaje = new Mensajes_JSON();
 
-            if($item['usuario'])
+            if(isset($item['usuario']))
             {
                 $res = $perm->getRolUsuario($id = $item['usuario']);
                 $row = $res->fetch(); 
@@ -23,15 +23,15 @@
                 
                 $listar->listarReservasUsu($item);
             }
-            else if($item['numReservacion'])
+            else if(isset($item['numReservacion']))
             {
                 $listar->ConsultarReservacion($id = $item['numReservacion']);
             }
-            else if($item['cancha'])
+            else if(isset($item['cancha']))
             {
                 $listar->ConsultarReservacionCancha($id = $item['cancha']);
             }
-            else if($item['fecha'])
+            else if(isset($item['fecha']))
             {
                 $item['fecha'] = $mensaje->formatFecha($item['fecha']);
                 $listar->listarReservasFecha($item);
