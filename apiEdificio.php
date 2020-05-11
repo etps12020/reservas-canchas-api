@@ -23,6 +23,7 @@
                         'id'            =>$row['idEdificio'],
                         'nombre'        =>$row['nombre'],
                         'direccion'     =>$row['direccion'],
+                        'idEstado'      =>$row['idEstado'],
                         'estado'        =>$row['estado'],
                         'descripcion'   =>$row['descripcion'],
                         'imagen'        =>base64_encode($row['imagen'])
@@ -55,6 +56,7 @@
                     'id'            =>$row['idEdificio'],
                     'nombre'        =>$row['nombre'],
                     'direccion'     =>$row['direccion'],
+                    'idEstado'      =>$row['idEstado'],
                     'estado'        =>$row['estado'],
                     'descripcion'   =>$row['descripcion'],
                     'imagen'        =>base64_encode($row['imagen']),
@@ -83,14 +85,30 @@
 
         //actualizar
         function update($item)
-        {
-           
-            $edificio = new edificio();
-            $res = $edificio->actualizarEdificio($item);
-            
-            //imprimir mensajes
+        {  
             $mensaje = new Mensajes_JSON();
-            $mensaje->exito('Datos actualizados');
+            $edificio = new edificio();
+
+            if($item['estado'] !=1)
+            {
+                $res = $edificio->validarEdificioID($id = $item['id']);
+                $row = $res->fetch();
+                if($row['var'] == 0)
+                {
+                    $res = $edificio->actualizarEdificio($item);
+                    $mensaje->exito('Datos actualizados');
+                }
+                else
+                {
+                    $mensaje->error('no se puede cambiar el estado ya que hay reservaciones pendientes');
+                }
+            }
+            else
+            {
+                $res = $edificio->actualizarEdificio($item);
+                $mensaje->exito('Datos actualizados');
+            }
+            
         }
 
          //eliminar
@@ -104,7 +122,7 @@
              $row = $res->fetch();
 
              //si la consulta retorna 0 se procede a eliminar sino muestra el mensaje de error
-             if($row['cantidad'] == 0)
+             if($row['var'] == 0)
              {
                 $item = ['id'=>$id, 'accion'=>'eliminar'];
                 $res = $edificio->eliminarEdificio($item);
