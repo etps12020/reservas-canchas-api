@@ -18,7 +18,6 @@ class reservacion extends ConexionDB
     {
         $query = $this->connect()->prepare('Call getAllDisponibilidadHorarios(:cancha, :fecha)');
         $query->execute([ 'cancha'=>$item['cancha'], 'fecha'=>$item['fecha'] ]);
-
         return $query;
     }
 
@@ -119,12 +118,11 @@ class reservacion extends ConexionDB
     }
 
     //consultar el estado actual de la cancha
-    function getEstado($id)
+    function ConsultarEstadoCancha($id)
     {
-        echo $id;
-        $query = $this->connect()->prepare('Call getEstadoCancha(:num)');
-        $query->execute([ 'num'=>$id ]);
-        echo var_dump( $query);
+        $query = $this->connect()->prepare('Call getEstadoCancha(:id)');
+        $query->execute(['id'=>$id]);
+
         return $query;
     }
 

@@ -59,13 +59,11 @@
             //consultar el estado del usuario que solicita la reservacion
             $res = $perm->getEstadoUsuario($id = $item['usuario']);
             $row = $res->fetch(); 
-
             if($row['estado'] == 1)
             {
                 //validar que la cancha esta disponible
-                $res = $reserva->getEstado($id = $item['cancha']);
-                $row = $res->fech();
-                echo var_dump($row);
+                $res = $reserva->ConsultarEstadoCancha($id = $item['cancha']);
+                $row = $res->fetch();
                 if($row['var'] == 1)
                 {
                     $res = $reserva->consultarDisponibilidad($item);
