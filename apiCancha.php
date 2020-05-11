@@ -65,7 +65,7 @@
             }
             else
             {
-                $mensaje->error('No hay elementos seleccionados');
+                $mensaje->error('No hay datos registrados');
             }
         }
 
@@ -83,30 +83,44 @@
         //actualizar estado
         function update($item)
         {
-           
-            $cancha = new Cancha();
-            $res = $cancha->actualizarCancha($item);
-            
-            //imprimir mensajes
             $mensaje = new Mensajes_JSON();
-            $mensaje->exito('Datos actualizados');
+            $cancha = new Cancha();
+            if($item['estado'] !=1)
+            {
+                $array = ['id' => $item['id'], 'accion'=>'validar'];
+                $res = $cancha->validarCanchaID($array);
+                $row = $res->fetch();
+                if($row['var'] == 0)
+                {
+                    $res = $cancha->actualizarCancha($item);
+                    $mensaje->exito('Datos actualizados');
+                }
+                else
+                {
+                    $mensaje->error('no se puede cambiar el estado ya que hay reservaciones aprobadas');
+                }
+            }
+            else
+            {
+                $res = $cancha->actualizarCancha($item);
+                $mensaje->exito('Datos actualizados');
+            }
         }
 
         //eliminar estado
         function delete($id)
         {
-            $mensaje 	= new Mensajes_JSON();
-            $cancha 	= new Cancha();
+            $mensaje = new Mensajes_JSON();
+            $cancha = new Cancha();
 
             //se realiza una consulta previa validando que el ID no este siendo utilizado en otra tabla
-            $res = $cancha->validarCanchaID($id);
+            $item = ['id'=>$id, 'accion'=>'eliminar'];
+            $res = $cancha->validarCanchaID($item);
             
             $row = $res->fetch();
             //si la consulta retorna 0 se procede a eliminar sino muestra el mensaje de error
-            
-            if($row['cantidad'] == 0)
+            if($row['var'] == 0)
             {
-                $item = ['id'=>$id, 'accion'=>'eliminar'];
                 $res = $cancha->eliminarCancha($item);
                 $mensaje->exito('Datos eliminados con exito');
             }

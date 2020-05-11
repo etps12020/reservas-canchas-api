@@ -57,41 +57,52 @@
             $item['estado'] = 1;
 
             //consultar el estado del usuario que solicita la reservacion
-            $res = $perm->getEstadoUsuario($item['usuario']);
+            $res = $perm->getEstadoUsuario($id = $item['usuario']);
             $row = $res->fetch(); 
 
-            if ($row['estado'] == 1)
+            if($row['estado'] == 1)
             {
-                $res = $reserva->consultarDisponibilidad($item);
-                $roll = $res->fetch();
-                //validar disponibilidad de cancha, fecha y hora         
-                if($roll['var'] == 0)
+                //validar que la cancha esta disponible
+                $res = $reserva->getEstado($id = $item['cancha']);
+                $row = $res->fech();
+                echo var_dump($row);
+                if($row['var'] == 1)
                 {
-                    $res = $perm->validarFechaRol($item);
-                    $row = $res->fetch();
-                    //validar que un usuario final no tenga una reserva en esa fecha
-                    if($row['var'] == 0)
+                    $res = $reserva->consultarDisponibilidad($item);
+                    $roll = $res->fetch();
+                    //validar disponibilidad de cancha, fecha y hora          
+                    if($roll['var'] == 0)
                     {
-                        //usuario que esta realizando la reserva
-                        if(array_key_exists('usuarioAd', $item))
+                        $res = $perm->validarFechaRol($item);
+                        $row = $res->fetch();
+                        //validar que un usuario final no tenga una reserva en esa fecha
+                        if($row['var'] == 0)
                         {
-                            $res = $reserva->registrarReserva($item);
-                            $mensaje->exito('Reservacion registrada por Asistente');
+                            //usuario que esta realizando la reserva
+                            if(array_key_exists('usuarioAd', $item))
+                            {
+                                $res = $reserva->registrarReserva($item);
+                                $mensaje->exito('Reservacion registrada por Asistente');
+                            }
+                            else
+                            {
+                                $res = $reserva->nuevaReserva($item);
+                                $mensaje->exito('Reservacion registrada por usuario');
+                            }
                         }
                         else
                         {
-                            $res = $reserva->nuevaReserva($item);
-                            $mensaje->exito('Reservacion registrada por usuario');
+                            $mensaje->error('posee una reservacion para esa fecha');
                         }
                     }
                     else
                     {
-                        $mensaje->error('posee una reservacion para esa fecha');
+                        $mensaje->error('ya existe una reservacion aprobada para esa hora y fecha');
                     }
                 }
                 else
                 {
-                    $mensaje->error('ya existe una reservacion aprobada para esa hora y fecha');
+                    $mensaje->error('No se puede reservar en esa cancha');
                 }
             }
             else
@@ -100,7 +111,6 @@
             }
             
         }
-
 
         function update($item)
         {

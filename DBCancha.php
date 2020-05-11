@@ -34,7 +34,7 @@
 
         //consulta update
         function actualizarCancha($cancha)
-         {
+        {
 
             $query = $this->connect()->prepare('Call UpdateCancha(:id, :nombre, :descripcion, :telefono, :horaInicio, :horaFin, :idEdificio, :idTipoCancha, :idEstado, :idRestricciones, :imagen)');
             
@@ -52,20 +52,17 @@
                             ]);
 
              return $query;
-         }
+        }
 
          //antes de elimininar un estado se valida si este no a sido ocupado
-         function validarCanchaID($id)
-         {
-            
-            $query = $this->connect()->prepare('SELECT count(cancha.idCancha) AS cantidad FROM cancha INNER JOIN reservacion
-                                                ON cancha.idCancha = reservacion.idCancha
-                                                WHERE cancha.idCancha = :id');
-            $query->execute(['id' =>$id]);
-            
+         function validarCanchaID($cancha)
+        {
+            $query = $this->connect()->prepare('Call getValidarCancha(:id, :accion)');
+            $query->execute([ 'id'=>$cancha['id'], 'accion'=>$cancha['accion'] ]);
+
             return $query;
  
-         }
+        }
 
          //una ves se ha validado que no el ID no esta siendo utilizado
          function eliminarCancha($cancha)
@@ -74,8 +71,7 @@
             $query->execute([ 'id'=>$cancha['id'], 'accion'=>$cancha['accion'] ]);
 
              return $query;
-    
          }
-
+        
     }
 ?>

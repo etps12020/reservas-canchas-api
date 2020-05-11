@@ -91,7 +91,8 @@
 
             if($item['estado'] !=1)
             {
-                $res = $edificio->validarEdificioID($id = $item['id']);
+                $array = ['id' => $item['id'], 'accion'=>'validar'];
+                $res = $edificio->validarEdificioID($array);
                 $row = $res->fetch();
                 if($row['var'] == 0)
                 {
@@ -100,7 +101,7 @@
                 }
                 else
                 {
-                    $mensaje->error('no se puede cambiar el estado ya que hay reservaciones pendientes');
+                    $mensaje->error('no se puede cambiar el estado ya que hay reservaciones aprobadas');
                 }
             }
             else
@@ -117,14 +118,15 @@
              $mensaje = new Mensajes_JSON();
              $edificio = new edificio();
              //se realiza una consulta previa validando que el ID no este siendo utilizado en otra tabla
-             $res = $edificio->validarEdificioID($id);
+             $item = ['id'=>$id, 'accion'=>'eliminar'];
+
+             $res = $edificio->validarEdificioID($item);
              
              $row = $res->fetch();
-
              //si la consulta retorna 0 se procede a eliminar sino muestra el mensaje de error
              if($row['var'] == 0)
              {
-                $item = ['id'=>$id, 'accion'=>'eliminar'];
+                
                 $res = $edificio->eliminarEdificio($item);
                 $mensaje->exito('Datos eliminados con exito');
 

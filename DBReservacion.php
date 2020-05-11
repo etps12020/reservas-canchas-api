@@ -118,5 +118,15 @@ class reservacion extends ConexionDB
         return $query;
     }
 
+    //consultar el estado actual de la cancha
+    function getEstado($id)
+    {
+        echo $id;
+        $query = $this->connect()->prepare('Call getEstadoCancha(:num)');
+        $query->execute([ 'num'=>$id ]);
+        echo var_dump( $query);
+        return $query;
+    }
+
 }
 ?>

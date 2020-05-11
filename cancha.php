@@ -12,8 +12,16 @@
 
         if(!empty($data))
         {
-            $api->getById($data);
-            exit;
+            if(isset($data['cancha']) or isset($data['edificio']) or isset($data['tipo']))
+            {
+                $api->getById($data);
+                exit;
+            }
+            else
+            {
+                $mensaje->error('ERROR Los parametros son incorrectos');
+            }
+            
         }
         else
         {

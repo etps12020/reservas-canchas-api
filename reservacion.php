@@ -11,8 +11,16 @@
 
         if(!empty($data))
         {
-            $api->getById($data);
-            exit;
+            if(isset($data['usuario']) or isset($data['numReservacion']) or isset($data['cancha']) or isset($data['fecha']))
+            {
+                $api->getById($data);
+                exit;
+            }
+            else
+            {
+                $mensaje->error('ERROR Los parametros son incorrectos');
+            }
+            
         }
         else
         {
