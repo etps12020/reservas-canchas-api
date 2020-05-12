@@ -11,15 +11,21 @@
     {
         $data = $mensaje->obtenerJSON();
      
-        if(isset($data['id']))
+        if(!empty($data))
         {
             $id = $data['id'];
-
+            
             //validar solo un id numerico
-            if(is_numeric($id))
+            if(is_numeric($id) && isset($data['accion']))
             {
-                $api->getById($id);
-                exit;
+                if($data['accion'] == 'dui')
+                {
+                   $api->getAll($data);
+                }
+                else
+                {
+                    $api->getById($data);
+                }
             }
             else
             {
@@ -27,12 +33,9 @@
             }
         }
         else
-        {   
-             //listar todos
-            $api->getAll();
-            exit;
+        {
+            $mensaje->error('Error al llamar la API');
         }
-    
     }
 
     //insert
@@ -40,10 +43,11 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['nombre']) && isset($data['carnet']) && isset($data['correo']) 
+        if(isset($data['nombre']) && isset($data['dui']) && isset($data['carnet']) && isset($data['correo']) 
             && isset($data['telefono']) && isset($data['rol']))
         {
             $api->add($data);
+             
         }
         else
         {   
@@ -51,16 +55,17 @@
         }
     }
 
-    //actualizar
+    //actualizar  modificar
     if ($_SERVER['REQUEST_METHOD'] == 'PUT')
     {
         $data = $mensaje->obtenerJSON();
         $i = count($data);
 
-        if($i == 8)
+        if($i == 10)
         {
-            if(isset($data['id']) && isset($data['nombre']) && isset($data['carnet']) && isset($data['correo']) 
-            && isset($data['telefono']) && isset($data['password']) && isset($data['rol']) && isset($data['estado']))
+            if(isset($data['usuloguedo']) && isset($data['id']) && isset($data['nombre']) && isset($data['dui']) 
+            && isset($data['carnet']) && isset($data['correo']) && isset($data['telefono']) && isset($data['password']) 
+            && isset($data['rol']) && isset($data['estado']))
             {
                 
                 $api->update($data);
@@ -74,8 +79,15 @@
         {
             if(isset($data['id']) && isset($data['telefono']) && isset($data['password']))
             {
-            
-                $api->update($data);
+                if(!empty($data['id']) && !empty($data['telefono']) && !empty($data['password']))
+                {
+                    $api->update($data);
+                }
+                else
+                {
+                    $mensaje->error('Campos vacios no se puede actualizar');
+                }
+                
             }
             else
             {

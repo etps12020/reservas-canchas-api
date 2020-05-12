@@ -75,11 +75,12 @@
         //registrar
         function add($item)
         {
+            $mensaje = new Mensajes_JSON();
             $edificio = new edificio();
+
+            $item['estado'] = 2;
             $res = $edificio->nuevoEdificio($item);
 
-            //imprimir mensajes
-            $mensaje = new Mensajes_JSON();
             $mensaje->exito('Datos registrados');
         }
 
@@ -89,11 +90,16 @@
             $mensaje = new Mensajes_JSON();
             $edificio = new edificio();
 
-            if($item['estado'] !=1)
+            $res = $edificio->getvalidarEstado($id = $item['id']);
+            $row = $res->fetch();
+            $estadoActual = $row['estado'];
+
+            if($item['estado'] == 2 && $estadoActual == 1)
             {
-                $array = ['id' => $item['id'], 'accion'=>'validar'];
-                $res = $edificio->validarEdificioID($array);
-                $row = $res->fetch();
+	           $array = ['id' => $item['id'], 'accion'=>'validar'];
+               $res = $edificio->validarEdificioID($array);
+               $row = $res->fetch();
+
                 if($row['var'] == 0)
                 {
                     $res = $edificio->actualizarEdificio($item);
@@ -104,12 +110,20 @@
                     $mensaje->error('no se puede cambiar el estado ya que hay reservaciones aprobadas');
                 }
             }
-            else
+            else if($estadoActual == 2 && ($item['estado'] == 1 or $item['estado'] == 2))
             {
                 $res = $edificio->actualizarEdificio($item);
                 $mensaje->exito('Datos actualizados');
             }
-            
+            else if($estadoActual == 1 && $item['estado'] == 1)
+            {
+                $res = $edificio->actualizarEdificio($item);
+                $mensaje->exito('Datos actualizados');
+            }
+            else
+            {
+                $mensaje->error('No se puede actualizar el estado');
+            }
         }
 
          //eliminar

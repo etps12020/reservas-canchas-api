@@ -74,9 +74,12 @@
              return $query;
          }
 
-         function validarEstado()
+         function getvalidarEstado($id)
          {
+            $query = $this->connect()->prepare('SELECT idEstado AS estado FROM edificio WHERE idEdificio = :id');
+            $query->execute(['id'=>$id]);
 
+            return $query;
          }
    
     }

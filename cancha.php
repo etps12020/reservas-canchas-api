@@ -38,14 +38,14 @@
         $data = $mensaje->obtenerJSON();
 
         if(isset($data['nombre']) && isset($data['descripcion']) && isset($data['telefono']) && isset($data['horaInicio']) 
-            && isset($data['horaFin']) && isset($data['idEdificio']) && isset($data['idTipoCancha']) &&  
-            isset($data['idEstado']) &&  isset($data['idRestricciones']) &&  isset($data['imagen']))
+            && isset($data['horaFin']) && isset($data['idEdificio']) && isset($data['idTipoCancha']) 
+            &&  isset($data['idRestricciones']) &&  isset($data['imagen']))
         {
             $api->add($data);
         }
         else
         {   
-            $mensaje->error('Error al llamar la API insertar validar que los campos esten llenos');
+            $mensaje->error('Error al llamar la API insertar');
         }
     }
 
@@ -56,7 +56,7 @@
 
         if(isset($data['id']) && isset($data['nombre']) && isset($data['descripcion']) && isset($data['telefono']) && isset($data['horaInicio']) 
             && isset($data['horaFin']) && isset($data['idEdificio']) && isset($data['idTipoCancha']) &&  
-            isset($data['idEstado']) &&  isset($data['idRestricciones']) &&  isset($data['imagen']) )
+            isset($data['estado']) &&  isset($data['idRestricciones']) &&  isset($data['imagen']) )
         {
             $api->update($data);
         }

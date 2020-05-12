@@ -1,6 +1,7 @@
 <?php
     include_once 'Permisos.php';
     include_once 'DBReservacion.php';
+    include_once 'DBCancha.php';
     include_once 'listarReservaciones.php';
     include_once 'Mensajes.php';
 
@@ -47,6 +48,7 @@
         {
             $perm = new permisos();
             $reserva = new reservacion();
+            $cancha = new Cancha();
             $mensaje = new Mensajes_JSON();
 
             //modificar el formato de la fecha
@@ -62,7 +64,7 @@
             if($row['estado'] == 1)
             {
                 //validar que la cancha esta disponible
-                $res = $reserva->ConsultarEstadoCancha($id = $item['cancha']);
+                $res = $cancha->ConsultarEstadoCancha($id = $item['cancha']);
                 $row = $res->fetch();
                 if($row['var'] == 1)
                 {

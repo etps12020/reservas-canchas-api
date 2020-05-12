@@ -105,7 +105,6 @@ class reservacion extends ConexionDB
         $query->execute([   'usu'  =>$reserva['usuario'],
                             'rol'  =>$reserva['rol']
                         ]);
-
         return $query;
     }
 
@@ -116,15 +115,5 @@ class reservacion extends ConexionDB
 
         return $query;
     }
-
-    //consultar el estado actual de la cancha
-    function ConsultarEstadoCancha($id)
-    {
-        $query = $this->connect()->prepare('Call getEstadoCancha(:id)');
-        $query->execute(['id'=>$id]);
-
-        return $query;
-    }
-
 }
 ?>

@@ -5,26 +5,13 @@ include_once 'conexion.php';
 class usuario extends ConexionDB
 {
     //consulta para listar todos los datos
-    function obtenerUsuarios()
+    function obtenerUsuarios($usuario)
     {
-        $id=0;
-        $accion = "listar";
-
         $query = $this->connect()->prepare('Call getAllUsuario(:id, :accion)');
-        $query->execute(['id' =>$id, 'accion' =>$accion]);
+        $query->execute(['id' =>$usuario['id'], 'accion' =>$usuario['accion']]);
         return $query;
     }
 
-    //se realiza la consulta en base al id solicitado
-    function obtenerUsuario($id)
-    {
-        $accion = "buscar";
-
-        $query = $this->connect()->prepare('Call getAllUsuario(:id, :accion)');
-        $query->execute(['id' =>$id, 'accion' =>$accion]);
-
-        return $query;
-    }
 
     //$estado es array de objetos que traera los datos a insertar
     function nuevoUsuario($usuario)
@@ -59,6 +46,7 @@ class usuario extends ConexionDB
         return $query;
     }
 
+    
     function modificarDatos($usuario)
     {
         $query = $this->connect()->prepare('UPDATE usuario SET telefono = :telefono, password = :pass WHERE idUsuario=:id');
@@ -124,6 +112,21 @@ class usuario extends ConexionDB
         $query = $this->connect()->prepare('SELECT count(carnet) AS var FROM usuario WHERE carnet = :carnet');
         $query->execute(['carnet'=>$usuario['carnet']]);
 
+        return $query;
+    }
+
+    //funcion validar dui
+    function validarDUI($usuario)
+    {
+        $query = $this->connect()->prepare('SELECT count(dui) AS var FROM usuario WHERE dui = :dui');
+        $query->execute(['dui'=>$usuario['dui']]);
+        return $query;
+    }
+
+    function consultarDUI($id)
+    {   
+        $query = $this->connect()->prepare('Call getAllDUI(:i)');
+        $query->execute(['i'=>$id]);
         return $query;
     }
 }

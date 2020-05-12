@@ -73,10 +73,11 @@
         function add($item)
         {
             $cancha = new Cancha();
+            $mensaje = new Mensajes_JSON();
+
+            $item['estado'] = 2;
             $res = $cancha->nuevoCancha($item);
 
-            //imprimir mensajes
-            $mensaje = new Mensajes_JSON();
             $mensaje->exito('Datos registrados');
         }
 
@@ -85,7 +86,13 @@
         {
             $mensaje = new Mensajes_JSON();
             $cancha = new Cancha();
-            if($item['estado'] !=1)
+
+            $res = $cancha->ConsultarEstadoCancha($id = $item['id']);
+            $row = $res->fetch();
+            
+            $estadoActual = $row['var'];
+
+            if($item['estado'] == 2 && $estadoActual == 1)
             {
                 $array = ['id' => $item['id'], 'accion'=>'validar'];
                 $res = $cancha->validarCanchaID($array);
@@ -100,10 +107,19 @@
                     $mensaje->error('no se puede cambiar el estado ya que hay reservaciones aprobadas');
                 }
             }
-            else
+            else if($estadoActual == 2 && ($item['estado'] == 1 or $item['estado'] == 2))
             {
                 $res = $cancha->actualizarCancha($item);
                 $mensaje->exito('Datos actualizados');
+            }
+            else if($estadoActual == 1 && $item['estado'] == 1)
+            {
+                $res = $cancha->actualizarCancha($item);
+                $mensaje->exito('Datos actualizados');
+            }
+            else
+            {
+                $mensaje->error('No se puede actualizar el estado');
             }
         }
 

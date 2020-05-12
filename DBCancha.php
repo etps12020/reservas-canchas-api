@@ -24,7 +24,7 @@
                             'horaEnd'       =>$cancha['horaFin'], 
                             'idEdi'         =>$cancha['idEdificio'], 
                             'tipo'          =>$cancha['idTipoCancha'], 
-                            'estado'        =>$cancha['idEstado'], 
+                            'estado'        =>$cancha['estado'], 
                             'restringido'   =>$cancha['idRestricciones'],
                             'imagen'        =>$cancha['imagen']
                             ]);
@@ -46,7 +46,7 @@
                                 'horaFin'       =>$cancha['horaFin'], 
                                 'idEdificio'    =>$cancha['idEdificio'], 
                                 'idTipoCancha'  =>$cancha['idTipoCancha'], 
-                                'idEstado'      =>$cancha['idEstado'], 
+                                'idEstado'      =>$cancha['estado'], 
                                 'idRestricciones'=>$cancha['idRestricciones'],
                                 'imagen'        =>$cancha['imagen']
                             ]);
@@ -72,6 +72,15 @@
 
              return $query;
          }
+        
+         //consultar el estado actual de la cancha
+        function ConsultarEstadoCancha($id)
+        {
+            $query = $this->connect()->prepare('Call getEstadoCancha(:id)');
+            $query->execute(['id'=>$id]);
+
+            return $query;
+        }
         
     }
 ?>

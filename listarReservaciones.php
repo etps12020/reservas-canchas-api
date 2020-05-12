@@ -16,13 +16,16 @@
             if($res->rowCount())
             {
                 while($row = $res->fetch(PDO::FETCH_ASSOC))
-                {   
+                {  
                     $item = array(
                         'numReservacion'    =>$row['numReservacion'],
                         'fechaReservacion'  =>$row['fechaReservacion'],
+                        'Horario'           =>$row['idHorarioReservacion'],
                         'horaInicio'        =>$row['horaInicio'],
                         'horaFin'           =>$row['horaFin'],
+                        'idCancha'          =>$row['idCancha'],
                         'cancha'            =>$row['cancha'],
+                        'idEstado'          =>$row['idEstado'],
                         'estado'            =>$row['estado']
                     );
                     array_push($reservaciones, $item);
@@ -85,11 +88,14 @@
                     $item = array(
                         'fechayHoraCreacion' =>$row['fechayHoraCreacion'],
                         'numReservacion'    =>$row['numReservacion'],
-                        'nombreCompleto'    =>$row['nombreCompleto'],
+                        'usuario'            =>$row['idUsuario'],
+                        'nombre'            =>$row['nombreCompleto'],
                         'telefono'          =>$row['telefono'],
                         'fechaReservacion'  =>$row['fechaReservacion'],
+                        'Horario'           =>$row['idHorarioReservacion'],
                         'horaInicio'        =>$row['horaInicio'],
                         'horaFin'           =>$row['horaFin'],
+                        'idEstado'          =>$row['idEstado'],
                         'estado'            =>$row['estado']
                     );
                     array_push($reservaciones, $item);
@@ -118,14 +124,18 @@
                 { 
                    $item = array(
                         'fechayHoraCreacion' =>$row['fechayHoraCreacion'],
-                        'numReservacion'    =>$row['numReservacion'],
-                        'nombreCompleto'    =>$row['nombreCompleto'],
-                        'telefono'          =>$row['telefono'],
-                        'fechaReservacion'  =>$row['fechaReservacion'],
-                        'horaInicio'        =>$row['horaInicio'],
-                        'horaFin'           =>$row['horaFin'],
-                        'cancha'            =>$row['cancha'],
-                        'estado'            =>$row['estado']
+                        'numReservacion'     =>$row['numReservacion'],
+                        'usuario'            =>$row['idUsuario'],
+                        'nombreCompleto'     =>$row['nombreCompleto'],
+                        'telefono'           =>$row['telefono'],
+                        'fechaReservacion'   =>$row['fechaReservacion'],
+                        'Horario'            =>$row['idHorarioReservacion'],
+                        'horaInicio'         =>$row['horaInicio'],
+                        'horaFin'            =>$row['horaFin'],
+                        'idCancha'           =>$row['idCancha'],
+                        'cancha'             =>$row['cancha'],
+                        'idEstado'           =>$row['idEstado'],
+                        'estado'             =>$row['estado']
                     );
                     array_push($reservaciones, $item);
                 }
