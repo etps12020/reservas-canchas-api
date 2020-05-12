@@ -48,29 +48,22 @@
          //antes de elimininar un estado se valida si este no a sido ocupado
          function validarEstadoID($id)
          {
-            
             $query = $this->connect()->prepare('SELECT count(estado_cancha.idEstado) AS cantidad FROM cancha INNER JOIN estado_cancha
                                                 ON cancha.idEstado = estado_cancha.idEstado
                                                 WHERE estado_cancha.idEstado = :id');
             $query->execute(['id' =>$id]);
             
             return $query;
- 
          }
 
          //una ves se ha validado que no el ID no esta siendo utilizado
          function eliminarEstado($estado)
-         {
-            
+         { 
             $query = $this->connect()->prepare('Call getAllEstadoCancha(:id, :accion, :var)');
             $query->execute(['id'=>$estado['id'], 'accion'=>$estado['accion'], 'var'=>$estado['var']]);
 
              return $query;
-    
          }
-
-        
+   
     }
-
-
 ?>

@@ -57,13 +57,10 @@
          }
 
          //antes de elimininar un estado se valida si este no a sido ocupado
-         function validarEdificioID($id)
+         function validarEdificioID($edificio)
          {
-            
-            $query = $this->connect()->prepare('SELECT count(idCancha) AS cantidad FROM cancha INNER JOIN edificio
-                                                ON edificio.idEdificio = cancha.idCancha
-                                                WHERE edificio.idEdificio = :id');
-            $query->execute(['id'=>$id]);
+            $query = $this->connect()->prepare('Call getValidarEdificio(:id, :accion)');
+            $query->execute([ 'id'=>$edificio['id'], 'accion'=>$edificio['accion'] ]);
             
             return $query;
          }
@@ -75,6 +72,11 @@
             $query->execute([ 'id'=>$edificio['id'], 'accion'=>$edificio['accion'] ]);
 
              return $query;
+         }
+
+         function validarEstado()
+         {
+
          }
    
     }

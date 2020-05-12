@@ -85,12 +85,13 @@
         function update($item)
         {
             $estado = new estadoCancha();
-            $item['accion'] = "update";
-            $res = $estado->actualizarEstado($item);
+
+                $item['accion'] = "update";
+                $res = $estado->actualizarEstado($item);
             
-            //imprimir mensajes
-            $mensaje = new Mensajes_JSON();
-            $mensaje->exito('Datos actualizados');
+                //imprimir mensajes
+                $mensaje = new Mensajes_JSON();
+                $mensaje->exito('Datos actualizados');
         }
 
         //eliminar estado
