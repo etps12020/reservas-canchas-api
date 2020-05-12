@@ -25,7 +25,7 @@
             }
             else
             {
-                $this->listarCanchas($item);
+                $this->listarCanchas($item); 
             }
             
         }

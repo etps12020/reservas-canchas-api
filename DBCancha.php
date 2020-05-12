@@ -16,7 +16,7 @@
         //$estado es array de objetos que traera los datos a insertar
         function nuevoCancha($cancha)
         {
-            $query = $this->connect()->prepare('Call InsertCancha(:nombre, :descripcion, :telefono, :horaIn, :horaEnd, :idEdi, :tipo, :estado, :restringido, :imagen)');
+            $query = $this->connect()->prepare('Call InsertCancha(:nombre, :descripcion, :telefono, :horaIn, :horaEnd, :idEdi, :tipo, :estado, :imagen)');
             $query->execute(['nombre'       =>$cancha['nombre'], 
                             'descripcion'   =>$cancha['descripcion'], 
                             'telefono'      =>$cancha['telefono'], 
@@ -25,7 +25,6 @@
                             'idEdi'         =>$cancha['idEdificio'], 
                             'tipo'          =>$cancha['idTipoCancha'], 
                             'estado'        =>$cancha['estado'], 
-                            'restringido'   =>$cancha['idRestricciones'],
                             'imagen'        =>$cancha['imagen']
                             ]);
 
@@ -36,7 +35,7 @@
         function actualizarCancha($cancha)
         {
 
-            $query = $this->connect()->prepare('Call UpdateCancha(:id, :nombre, :descripcion, :telefono, :horaInicio, :horaFin, :idEdificio, :idTipoCancha, :idEstado, :idRestricciones, :imagen)');
+            $query = $this->connect()->prepare('Call UpdateCancha(:id, :nombre, :descripcion, :telefono, :horaInicio, :horaFin, :idEdificio, :idTipoCancha, :idEstado, :imagen)');
             
             $query->execute([   'id'            =>$cancha['id'], 
                                 'nombre'        =>$cancha['nombre'], 
@@ -47,10 +46,8 @@
                                 'idEdificio'    =>$cancha['idEdificio'], 
                                 'idTipoCancha'  =>$cancha['idTipoCancha'], 
                                 'idEstado'      =>$cancha['estado'], 
-                                'idRestricciones'=>$cancha['idRestricciones'],
                                 'imagen'        =>$cancha['imagen']
                             ]);
-
              return $query;
         }
 
