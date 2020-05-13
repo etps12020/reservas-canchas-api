@@ -194,7 +194,7 @@
             $mensaje = new Mensajes_JSON();
 
             $e = strlen($item['password']);
-            if($e < 8)
+            if($e < 8 or $e > 12)
             {
                 $mensaje->error('La longitud del password debe estar entre 8 y 12');
             }
@@ -203,38 +203,43 @@
                 $i = count($item);
                 if($i != 3)
                 {   
-                    //rol del usuario a actualizar
-                    $res = $perm->getRolUsuario($id = $item['id']);
-                    $row = $res->fetch(); 
-                    $RolU = $row['var'];
+                    $this->updateDUi($item);
+                    $bandera = $this->i;
+                    $this->updateCarnet($item);
+                    $bandera2 = $this->e;
+                    if($bandera !=1 && $bandera2 !=1)
+                    {   
+                        //rol del usuario a actualizar
+                        $res = $perm->getRolUsuario($id = $item['id']);
+                        $row = $res->fetch(); 
+                        $RolU = $row['var'];
 
-                    //rol del usuario que actualiza
-                    $res = $perm->getRolUsuario($id = $item['usuloguedo']);
-                    $row = $res->fetch(); 
-                    $rolA = $row['var'];
+                        //rol del usuario que actualiza
+                        $res = $perm->getRolUsuario($id = $item['usuloguedo']);
+                        $row = $res->fetch(); 
+                        $rolA = $row['var'];
 
-                    if($RolU == 3 && ($rolA == 1 or $rolA == 2))
-                    {
-                        $res = $usuario->actualizarUsuario($item);
-                        $mensaje->exito('Datos actualizados');
+                        if($RolU == 3 && ($rolA == 1 or $rolA == 2))
+                        {
+                            $res = $usuario->actualizarUsuario($item);
+                            $mensaje->exito('Datos actualizados');
+                        }
+                        else if ($RolU == 2 && $rolA = 1)
+                        {
+                            $res = $usuario->actualizarUsuario($item);
+                            $mensaje->exito('Datos actualizados');
+                        }
+                        else
+                        {
+                            $mensaje->error('No tiene permisos de edicion');
+                        }
                     }
-                    else if ($RolU == 2 && $rolA = 1)
-                    {
-                        $res = $usuario->actualizarUsuario($item);
-                        $mensaje->exito('Datos actualizados');
-                    }
-                    else
-                    {
-                        $mensaje->error('No tiene permisos de edicion');
-                    }
-                    
                 }
                 else
                 {   
                     $res = $usuario->modificarDatos($item);
                     $mensaje->exito('Datos actualizados');
                 }
-               
             } 
          }
          
@@ -281,6 +286,7 @@
                         'id'            =>$row['idUsuario'],
                         'nombre'        =>$row['nombreCompleto'],
                         'usuario'       =>$row['usuario'],
+                        'dui'           =>$row['dui'],
                         'carnet'        =>$row['carnet'],
                         'correo'        =>$row['correo'],
                         'telefono'      =>$row['telefono'],
@@ -306,6 +312,63 @@
             }
          }
 
+        function updateDUi($item)
+        {
+            $mensaje = new Mensajes_JSON();
+            $usuario = new usuario();
+            $var = ['id' => $item['id'], 'accion'=>'buscar'];
+            $res = $usuario->obtenerUsuarios($var);
+            $row = $res->fetch();
+
+            if($row['dui'] != $item['dui'])
+            {
+                $res = $usuario->validarDUI($item);
+                $row = $res->fetch();
+                if($row['var'] != 0)
+                {
+                    $mensaje->error('ERROR el DUI ya existe!');
+                    $i = 1;
+                }
+                else
+                {
+                    $i = 0;
+                }
+            }
+            else
+            {
+                $i = 0;
+            }
+            $this->i = $i;
+        }
+
+        function updateCarnet($item)
+        {
+            $mensaje = new Mensajes_JSON();
+            $usuario = new usuario();
+            $var = ['id' => $item['id'], 'accion'=>'buscar'];
+            $res = $usuario->obtenerUsuarios($var);
+            $row = $res->fetch();
+
+            if($row['carnet'] != $item['carnet'])
+            {
+                $res = $usuario->validarCarnet($item);
+                $row = $res->fetch();
+                if($row['var'] != 0)
+                {
+                    $mensaje->error('ERROR el carnet ya existe!');
+                    $e = 1;
+                }
+                else
+                {
+                    $e = 0;
+                }
+            }
+            else
+            {
+                $e = 0;
+            }
+            $this->e = $e;
+        }
          
          //generar password aleatorio por defecto
         function generarPassword()
