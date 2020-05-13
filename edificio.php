@@ -55,16 +55,37 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['id']) && isset($data['nombre']) && isset($data['direccion']) && isset($data['estado']) 
-            && isset($data['descripcion']) && isset($data['imagen']) )
+        if(!empty($data))
         {
-            
-            $api->update($data);
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
+            {
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
+            }
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios no se puede actualizar');
+            }
+            else 
+            {
+                if(isset($data['id']) && isset($data['nombre']) && isset($data['direccion']) && isset($data['estado']) 
+                && isset($data['descripcion']) && isset($data['imagen']) )
+                {
+                    $api->update($data);
+                }
+                else
+                {
+                    $mensaje->error('Los parametros son incorrectos');
+                }
+            }
         }
         else
         {
             $mensaje->error('Error al llamar API Actualizar');
-        
         }
     }
 
