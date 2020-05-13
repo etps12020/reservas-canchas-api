@@ -27,7 +27,6 @@
                             'estado'        =>$cancha['estado'], 
                             'imagen'        =>$cancha['imagen']
                             ]);
-
             return $query;
         }
 

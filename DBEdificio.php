@@ -27,6 +27,7 @@
         //$edificio es array de objetos que traera los datos a insertar
         function nuevoEdificio($edificio)
         {
+
             $query = $this->connect()->prepare('Call InsertEdificio(:nombre, :direccion, :estado, :descripcion, :imagen)');
 
             $query->execute(['nombre'       =>$edificio['nombre'], 
@@ -35,7 +36,6 @@
                              'descripcion'  =>$edificio['descripcion'], 
                              'imagen'       =>$edificio['imagen']  
                             ]);
-
             return $query;
         }
 

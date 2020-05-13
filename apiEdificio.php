@@ -79,6 +79,7 @@
             $edificio = new edificio();
 
             $item['estado'] = 2;
+            
             $res = $edificio->nuevoEdificio($item);
 
             $mensaje->exito('Datos registrados');
