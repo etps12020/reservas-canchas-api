@@ -10,14 +10,36 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['usuario']) && isset($data['password']))
+        if(empty($data))
         {
-           $api->getAllUser($data);
+            $mensaje->error('ERROR al llamar API');
         }
         else
         {
-            $mensaje->error('No hay datos');
-            header("HTTP/1.1 400 Bad Request");
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
+            {
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
+            }
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios');
+            }
+            else 
+            {
+                if(isset($data['usuario']) && isset($data['password']))
+                {
+                    $api->getAllUser($data);
+                }
+                else
+                {
+                    $mensaje->error('Datos Incorrectos');
+                }
+            }
         }
     }
 ?>

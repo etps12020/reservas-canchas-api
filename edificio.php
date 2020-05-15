@@ -38,16 +38,39 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['nombre']) && isset($data['direccion']) && isset($data['descripcion']) && isset($data['imagen']))
+        if(empty($data))
         {
-
-            $api->add($data);
-           
+            $mensaje->error('ERROR al llamar API');
         }
         else
-        {   
-            $mensaje->error('Error al llamar API insertar');
+        {
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
+            {
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
+            }
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios');
+            }
+            else 
+            {
+                if(isset($_POST['nombre']) && isset($_POST['direccion'])
+                && isset($_POST['descripcion']) && isset($_POST['imagen']))
+                {
+                    $api->add($data);
+                }
+                else
+                {   
+                    $mensaje->error('Datos Incorrectos');
+                }
+            }
         }
+        
     }
 
     //actualizar
@@ -55,7 +78,11 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(!empty($data))
+        if(empty($data))
+        {
+            $mensaje->error('ERROR al llamar API');
+        }
+        else
         {
             $datos = (array_values($data));
             for($a = 0; $a < count($datos); $a++)
@@ -72,20 +99,16 @@
             }
             else 
             {
-                if(isset($data['id']) && isset($data['nombre']) && isset($data['direccion']) && isset($data['estado']) 
-                && isset($data['descripcion']) && isset($data['imagen']) )
+                if(isset($data['id']) && isset($data['nombre']) && isset($data['direccion'])
+                    && isset($data['descripcion']) && isset($data['imagen']) )
                 {
                     $api->update($data);
                 }
                 else
                 {
-                    $mensaje->error('Los parametros son incorrectos');
+                    $mensaje->error('Datos incorrectos');
                 }
             }
-        }
-        else
-        {
-            $mensaje->error('Error al llamar API Actualizar');
         }
     }
 

@@ -10,26 +10,41 @@
     if ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
         $data = $mensaje->obtenerJSON();
-     
         if(!empty($data))
         {
-            $id = $data['id'];
-            
-            //validar solo un id numerico
-            if(is_numeric($id) && isset($data['accion']))
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
             {
-                if($data['accion'] == 'dui')
+                if(empty($datos[$a])) 
                 {
-                   $api->getAll($data);
+                    $vacio++;
+                }
+            }
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios');
+            }
+            else 
+            {
+                $id = $data['id'];
+                //validar solo un id numerico
+                if(is_numeric($id) && isset($data['accion']))
+                {
+                    if($data['accion'] == 'dui')
+                    {
+                       $api->getAll($data);
+                    }
+                    else
+                    {
+                        $api->getById($data);
+                    }
                 }
                 else
                 {
-                    $api->getById($data);
+                    $mensaje->error('Datos Incorrectos');          
                 }
-            }
-            else
-            {
-                $mensaje->error('Los parametros son incorrectos');          
+
             }
         }
         else
@@ -45,71 +60,90 @@
 
         if(empty($data))
         {
-            $mensaje->error('Error al llamar la API insertar');
+            $mensaje->error('ERROR al llamar API');
         }
         else
         {
-            if(isset($data['nombre']) && isset($data['dui']) && isset($data['carnet']) && isset($data['correo']) 
-            && isset($data['telefono']) && isset($data['rol']))
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
             {
-                $api->add($data);
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
             }
-            else
-            {   
-                $mensaje->error('Los parametros son incorrectos');      
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios');
+            }
+            else 
+            {
+                if(isset($data['nombre']) && isset($data['dui']) && isset($data['carnet']) && isset($data['correo']) 
+                    && isset($data['telefono']) && isset($data['rol']))
+                {
+                    $api->add($data);
+                }
+                else
+                {   
+                    $mensaje->error('Datos Incorrectos');
+                }
             }
         }
-        
     }
 
-    //actualizar  modificar
+    //actualizar
     if ($_SERVER['REQUEST_METHOD'] == 'PUT')
     {
         $data = $mensaje->obtenerJSON();
-        $datos = (array_values($data));
         $i = count($data);
 
-        for($a = 0; $a < $i; $a++)
+        if(empty($data))
         {
-            if(empty($datos[$a])) 
-            {
-                $vacio++;
-            }
+            $mensaje->error('ERROR al llamar API');
         }
+        else
+        {
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
+            {
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
+            }
 
-        if($vacio != 0)
-        {
-            $mensaje->error('Campos vacios no se puede actualizar');
-        }
-        else 
-        {
-            if($i == 10)
-            {   
-                if(isset($data['usuloguedo']) && isset($data['id']) && isset($data['nombre']) && isset($data['dui']) 
-                && isset($data['carnet']) && isset($data['correo']) && isset($data['telefono']) && isset($data['password']) 
-                && isset($data['rol']) && isset($data['estado']))
-                {
-                    $api->update($data);
-                }
-                else
-                {
-                    $mensaje->error('Los parametros son incorrectos');   
-                }
-            }
-            else if($i == 3)
+            if($vacio != 0)
             {
-                if(isset($data['id']) && isset($data['telefono']) && isset($data['password']))
-                {
-                    $api->update($data);
-                }
-                else
-                {
-                    $mensaje->error('Los parametros son incorrectos');   
-                }
+                $mensaje->error('Campos vacios no se puede actualizar');
             }
-            else
+            else 
             {
-                $mensaje->error('Error al llamar la API Actualizar');
+                if($i == 8)
+                {
+                    if(isset($data['usuloguedo']) && isset($data['id']) && isset($data['nombre']) && isset($data['dui']) && isset($data['carnet']) && isset($data['correo']) 
+                    && isset($data['telefono']) && isset($data['password']) && isset($data['rol']) && isset($data['estado']))
+                    {
+                        
+                        $api->update($data);
+                    }
+                    else
+                    {
+                        $mensaje->error('Datos Incorrectos');
+                    }
+                }
+                else if($i == 3)
+                {
+                    if(isset($data['id']) && isset($data['telefono']) && isset($data['password']))
+                    {
+                    
+                        $api->update($data);
+                    }
+                    else
+                    {
+                        $mensaje->error('Datos Incorrectos');
+                    }
+                }
             }
         }
     }

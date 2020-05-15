@@ -12,16 +12,31 @@
 
         if(!empty($data))
         {
-            if(isset($data['cancha']) or isset($data['edificio']) or isset($data['tipo']))
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
             {
-                $api->getById($data);
-                exit;
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
             }
-            else
+
+            if($vacio != 0)
             {
-                $mensaje->error('ERROR Los parametros son incorrectos');
+                $mensaje->error('Campos vacios');
             }
-            
+            else 
+            {
+                if(isset($data['cancha']) or isset($data['edificio']) or isset($data['tipo']))
+                {
+                    $api->getById($data);
+                    exit;
+                }
+                else
+                {
+                    $mensaje->error('ERROR Los parametros son incorrectos');
+                }
+            }
         }
         else
         {
@@ -37,14 +52,38 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['nombre']) && isset($data['descripcion']) && isset($data['telefono']) && isset($data['horaInicio']) 
-            && isset($data['horaFin']) && isset($data['idEdificio']) && isset($data['idTipoCancha']) &&  isset($data['imagen']))
+        if(empty($data))
         {
-            $api->add($data);
+            $mensaje->error('ERROR al llamar API');
         }
         else
-        {   
-            $mensaje->error('Error al llamar la API insertar');
+        {
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
+            {
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
+            }
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios');
+            }
+            else 
+            {
+                if(isset($data['nombre']) && isset($data['descripcion']) && isset($data['telefono']) && isset($data['horaInicio']) 
+                    && isset($data['horaFin']) && isset($data['idEdificio']) && isset($data['idTipoCancha']) &&  
+                      isset($data['imagen']))
+                {
+                    $api->add($data);
+                }
+                else
+                {   
+                    $mensaje->error('Datos Incorrectos');
+                }
+            }
         }
     }
 
@@ -53,7 +92,11 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(!empty($data))
+        if(empty($data))
+        {
+            $mensaje->error('ERROR al llamar API');
+        }
+        else
         {
             $datos = (array_values($data));
             for($a = 0; $a < count($datos); $a++)
@@ -71,20 +114,16 @@
             else 
             {
                 if(isset($data['id']) && isset($data['nombre']) && isset($data['descripcion']) && isset($data['telefono']) && isset($data['horaInicio']) 
-                 && isset($data['horaFin']) && isset($data['idEdificio']) && isset($data['idTipoCancha']) &&  
-                isset($data['estado']) &&  isset($data['imagen']))
+                    && isset($data['horaFin']) && isset($data['idEdificio']) && isset($data['idTipoCancha']) &&  
+                      isset($data['imagen']) )
                 {
-                $api->update($data);
+                    $api->update($data);
                 }
                 else
                 {
-                    $mensaje->error('Los parametros son incorrectos');
+                    $mensaje->error('Datos Incorrectos');
                 }
             }
-        }
-        else
-        {
-            $mensaje->error('Error al llamar API Actualizar');
         }
     }
 

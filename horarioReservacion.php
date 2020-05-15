@@ -38,13 +38,36 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['horaInicio']) && isset($data['horaFin']))
+        if(empty($data))
         {
-            $api->add($data);
+            $mensaje->error('ERROR al llamar API');
         }
         else
-        {   
-            $mensaje->error('Error al llamar la API insertar');
+        {
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
+            {
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
+            }
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios');
+            }
+            else 
+            {
+                if(isset($data['horaInicio']) && isset($data['horaFin']))
+                {
+                    $api->add($data);
+                }
+                else
+                {   
+                    $mensaje->error('Datos Incorrectos');
+                }
+            }
         }
     }
 
@@ -53,14 +76,36 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['id']) && isset($data['horaInicio']) && isset($data['horaFin']))
+        if(empty($data))
         {
-            $api->update($data);
+            $mensaje->error('ERROR al llamar API');
         }
         else
         {
-            $mensaje->error('Error al llamar la API Actualizar');
-        
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
+            {
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
+            }
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios no se puede actualizar');
+            }
+            else 
+            {
+                if(isset($data['id']) && isset($data['horaInicio']) && isset($data['horaFin']))
+                {
+                    $api->update($data);
+                }
+                else
+                {
+                    $mensaje->error('Datos Incorrectos');
+                }
+            }
         }
     }
 

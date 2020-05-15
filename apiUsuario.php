@@ -312,6 +312,7 @@
             }
          }
 
+         
         function updateDUi($item)
         {
             $mensaje = new Mensajes_JSON();
