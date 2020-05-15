@@ -8,17 +8,17 @@
         {
             $mensaje = new Mensajes_JSON();
             
-            if($item['cancha'])
+            if(isset($item['cancha']))
             {
                 $item = ['id'=>$item['cancha'], 'accion'=>'cancha'];
                 $this->listarCanchas($item);
             }
-            else if($item['edificio'])
+            else if(isset($item['edificio']))
             {
                 $item = ['id'=>$item['edificio'], 'accion'=>'edificio'];
                 $this->listarCanchas($item);
             }
-            else if($item['tipo'])
+            else if(isset($item['tipo']))
             {
                 $item = ['id'=>$item['tipo'], 'accion'=>'tipo'];
                 $this->listarCanchas($item);
