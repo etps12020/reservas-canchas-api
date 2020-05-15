@@ -100,7 +100,7 @@
             else 
             {
                 if(isset($data['id']) && isset($data['nombre']) && isset($data['direccion'])
-                    && isset($data['descripcion']) && isset($data['imagen']) )
+                    && isset($data['descripcion']) && isset($data['estado']) && isset($data['imagen']) )
                 {
                     $api->update($data);
                 }

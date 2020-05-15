@@ -73,9 +73,9 @@
             }
             else 
             {
-                if(isset($data['nombre']) && isset($data['descripcion']) && isset($data['telefono']) && isset($data['horaInicio']) 
-                    && isset($data['horaFin']) && isset($data['idEdificio']) && isset($data['idTipoCancha']) &&  
-                      isset($data['imagen']))
+                if(isset($data['nombre']) && isset($data['descripcion']) && isset($data['telefono']) 
+                && isset($data['horaInicio'])  && isset($data['horaFin']) && isset($data['idEdificio']) 
+                && isset($data['idTipoCancha']) &&  isset($data['imagen']))
                 {
                     $api->add($data);
                 }
@@ -113,9 +113,9 @@
             }
             else 
             {
-                if(isset($data['id']) && isset($data['nombre']) && isset($data['descripcion']) && isset($data['telefono']) && isset($data['horaInicio']) 
-                    && isset($data['horaFin']) && isset($data['idEdificio']) && isset($data['idTipoCancha']) &&  
-                      isset($data['imagen']) )
+                if(isset($data['id']) && isset($data['nombre']) && isset($data['descripcion']) && isset($data['telefono'])
+                 && isset($data['horaInicio'])  && isset($data['horaFin']) && isset($data['idEdificio']) 
+                 && isset($data['idTipoCancha']) && isset($data['estado']) && isset($data['imagen']) )
                 {
                     $api->update($data);
                 }

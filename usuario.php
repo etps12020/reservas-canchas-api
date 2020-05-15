@@ -5,7 +5,6 @@
     $mensaje = new Mensajes_JSON();
     $api = new ApiUsuarios();
 
-
     //peticion get para listar todos los datos o solo el ID requerido
     if ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
