@@ -14,7 +14,6 @@
             $edificios = array();
 
             $res = $edificio->obtenerEdificios();
-
             if($res->rowCount())
             {
                 while($row = $res->fetch(PDO::FETCH_ASSOC))
@@ -70,8 +69,7 @@
                 $mensaje->error('No hay elementos seleccionados');
             }
         }
-
-
+        
         //registrar
         function add($item)
         {

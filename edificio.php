@@ -59,8 +59,7 @@
             }
             else 
             {
-                if(isset($_POST['nombre']) && isset($_POST['direccion'])
-                && isset($_POST['descripcion']) && isset($_POST['imagen']))
+                if(isset($data['nombre']) && isset($data['direccion']) && isset($data['descripcion']) && isset($data['imagen']))
                 {
                     $api->add($data);
                 }
