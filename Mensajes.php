@@ -18,7 +18,7 @@
 
         function obtenerJSON()
         {
-            $decode = $_GET;
+            $decode = $_REQUEST;
             return $this->decode = $decode;
         }
 

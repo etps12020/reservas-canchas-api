@@ -13,7 +13,7 @@
 			$this->host     = 'localhost';
 			$this->db       = 'reservas_utec';
 			$this->user     = 'root';
-			$this->password = 'root';
+			$this->password = '';
 			$this->charset  = 'utf8mb4';
 		}
 	
