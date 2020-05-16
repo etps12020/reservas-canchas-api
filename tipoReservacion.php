@@ -39,13 +39,36 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['tipo']) && isset($data['descripcion']))
+        if(empty($data))
         {
-            $api->add($data);
+            $mensaje->error('ERROR al llamar API');
         }
         else
-        {   
-            $mensaje->error('Error al llamar la API insertar');
+        {
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
+            {
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
+            }
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios');
+            }
+            else 
+            {
+                if(isset($data['tipo']) && isset($data['descripcion']))
+                {
+                    $api->add($data);
+                }
+                else
+                {   
+                    $mensaje->error('Error al llamar la API insertar');
+                }
+            }
         }
     }
 
@@ -54,14 +77,36 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        if(isset($data['id']) && isset($data['tipo']) && isset($data['descripcion']))
-        {   
-            $api->update($data);
+        if(empty($data))
+        {
+            $mensaje->error('ERROR al llamar API');
         }
         else
         {
-            $mensaje->error('Error al llamar la API Actualizar');
-        
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
+            {
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
+            }
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios no se puede actualizar');
+            }
+            else 
+            {
+                if(isset($data['id']) && isset($data['tipo']) && isset($data['descripcion']))
+                {   
+                    $api->update($data);
+                }
+                else
+                {
+                    $mensaje->error('Error al llamar la API Actualizar');
+                }
+            }
         }
     }
 

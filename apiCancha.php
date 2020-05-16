@@ -25,7 +25,7 @@
             }
             else
             {
-                $this->listarCanchas($item);
+                $this->listarCanchas($item); 
             }
             
         }
@@ -39,28 +39,31 @@
             $cancha = new Cancha();
             $canchas = array();
             $res = $cancha->obtenerCanchas($item);
- 
-            if($res->rowCount() == 1)
-            {
-                $row = $res->fetch();
-                $item = array(
+            $row = $res->fetch();
+
+            if($res->rowCount())
+            { 
+                do 
+                {
+                    $item = array(
                         'cancha'                =>$row['cancha'],
                         'nombre' 				=>$row['nombre'],
                         'descripcion'           =>$row['descripcion'],
-						'telefonoContacto' 		=>$row['telefonoContacto'],
-						'horaInicio' 			=>$row['horaInicio'],	
+                        'telefonoContacto' 		=>$row['telefonoContacto'],
+                        'horaInicio' 			=>$row['horaInicio'],	
                         'horaFin' 				=>$row['horaFin'],
                         'idEdificio'            =>$row['idEdificio'],
-						'edificio' 				=>$row['edificio'],						
-						'idTipoCancha' 			=>$row['idTipoCancha'],	
+                        'edificio' 				=>$row['edificio'],						
+                        'idTipoCancha' 			=>$row['idTipoCancha'],	
                         'tipo' 				    =>$row['tipo'],
                         'idEstado' 				=>$row['idEstado'],
                         'estado'                =>$row['estado'],
                         'imagen'  =>base64_encode($row['imagen']),
                         'fechaCreacion'         =>$row['fechaCreacion']
                         );
-                array_push($canchas, $item);
- 
+                    array_push($canchas, $item);
+                } 
+                while ($row = $res->fetch(PDO::FETCH_ASSOC));
                 $mensaje->printJSON($canchas);
             }
             else
@@ -73,10 +76,11 @@
         function add($item)
         {
             $cancha = new Cancha();
+            $mensaje = new Mensajes_JSON();
+
+            $item['estado'] = 2;
             $res = $cancha->nuevoCancha($item);
 
-            //imprimir mensajes
-            $mensaje = new Mensajes_JSON();
             $mensaje->exito('Datos registrados');
         }
 
@@ -85,7 +89,13 @@
         {
             $mensaje = new Mensajes_JSON();
             $cancha = new Cancha();
-            if($item['estado'] !=1)
+
+            $res = $cancha->ConsultarEstadoCancha($id = $item['id']);
+            $row = $res->fetch();
+            
+            $estadoActual = $row['var'];
+
+            if($item['estado'] == 2 && $estadoActual == 1)
             {
                 $array = ['id' => $item['id'], 'accion'=>'validar'];
                 $res = $cancha->validarCanchaID($array);
@@ -100,10 +110,19 @@
                     $mensaje->error('no se puede cambiar el estado ya que hay reservaciones aprobadas');
                 }
             }
-            else
+            else if($estadoActual == 2 && ($item['estado'] == 1 or $item['estado'] == 2))
             {
                 $res = $cancha->actualizarCancha($item);
                 $mensaje->exito('Datos actualizados');
+            }
+            else if($estadoActual == 1 && $item['estado'] == 1)
+            {
+                $res = $cancha->actualizarCancha($item);
+                $mensaje->exito('Datos actualizados');
+            }
+            else
+            {
+                $mensaje->error('No se puede actualizar el estado');
             }
         }
 

@@ -16,7 +16,7 @@
         //$estado es array de objetos que traera los datos a insertar
         function nuevoCancha($cancha)
         {
-            $query = $this->connect()->prepare('Call InsertCancha(:nombre, :descripcion, :telefono, :horaIn, :horaEnd, :idEdi, :tipo, :estado, :restringido, :imagen)');
+            $query = $this->connect()->prepare('Call InsertCancha(:nombre, :descripcion, :telefono, :horaIn, :horaEnd, :idEdi, :tipo, :estado, :imagen)');
             $query->execute(['nombre'       =>$cancha['nombre'], 
                             'descripcion'   =>$cancha['descripcion'], 
                             'telefono'      =>$cancha['telefono'], 
@@ -24,11 +24,9 @@
                             'horaEnd'       =>$cancha['horaFin'], 
                             'idEdi'         =>$cancha['idEdificio'], 
                             'tipo'          =>$cancha['idTipoCancha'], 
-                            'estado'        =>$cancha['idEstado'], 
-                            'restringido'   =>$cancha['idRestricciones'],
+                            'estado'        =>$cancha['estado'], 
                             'imagen'        =>$cancha['imagen']
                             ]);
-
             return $query;
         }
 
@@ -36,7 +34,7 @@
         function actualizarCancha($cancha)
         {
 
-            $query = $this->connect()->prepare('Call UpdateCancha(:id, :nombre, :descripcion, :telefono, :horaInicio, :horaFin, :idEdificio, :idTipoCancha, :idEstado, :idRestricciones, :imagen)');
+            $query = $this->connect()->prepare('Call UpdateCancha(:id, :nombre, :descripcion, :telefono, :horaInicio, :horaFin, :idEdificio, :idTipoCancha, :idEstado, :imagen)');
             
             $query->execute([   'id'            =>$cancha['id'], 
                                 'nombre'        =>$cancha['nombre'], 
@@ -46,11 +44,9 @@
                                 'horaFin'       =>$cancha['horaFin'], 
                                 'idEdificio'    =>$cancha['idEdificio'], 
                                 'idTipoCancha'  =>$cancha['idTipoCancha'], 
-                                'idEstado'      =>$cancha['idEstado'], 
-                                'idRestricciones'=>$cancha['idRestricciones'],
+                                'idEstado'      =>$cancha['estado'], 
                                 'imagen'        =>$cancha['imagen']
                             ]);
-
              return $query;
         }
 
@@ -72,6 +68,15 @@
 
              return $query;
          }
+        
+         //consultar el estado actual de la cancha
+        function ConsultarEstadoCancha($id)
+        {
+            $query = $this->connect()->prepare('Call getEstadoCancha(:id)');
+            $query->execute(['id'=>$id]);
+
+            return $query;
+        }
         
     }
 ?>
