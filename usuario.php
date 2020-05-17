@@ -4,6 +4,7 @@
 
     $mensaje = new Mensajes_JSON();
     $api = new ApiUsuarios();
+    $vacio=0;
 
     //peticion get para listar todos los datos o solo el ID requerido
     if ($_SERVER['REQUEST_METHOD'] == 'GET')
@@ -12,6 +13,7 @@
         if(!empty($data))
         {
             $datos = (array_values($data));
+            
             for($a = 0; $a < count($datos); $a++)
             {
                 if(empty($datos[$a])) 
@@ -56,6 +58,7 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
         $data = $mensaje->obtenerJSON();
+
 
         if(empty($data))
         {
@@ -118,7 +121,7 @@
             }
             else 
             {
-                if($i == 8)
+                if($i == 10)
                 {
                     if(isset($data['usuloguedo']) && isset($data['id']) && isset($data['nombre']) && isset($data['dui']) && isset($data['carnet']) && isset($data['correo']) 
                     && isset($data['telefono']) && isset($data['password']) && isset($data['rol']) && isset($data['estado']))
