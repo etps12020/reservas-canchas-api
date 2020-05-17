@@ -58,7 +58,7 @@
                         'tipo' 				    =>$row['tipo'],
                         'idEstado' 				=>$row['idEstado'],
                         'estado'                =>$row['estado'],
-                        'imagen'  =>base64_encode($row['imagen']),
+                        'imagen'  =>$row['imagen'],
                         'fechaCreacion'         =>$row['fechaCreacion']
                         );
                     array_push($canchas, $item);
