@@ -4,6 +4,8 @@
 
     $mensaje = new Mensajes_JSON();
     $api = new ApiUsuarios();
+    $vacio = "";
+    
 
     //peticion get para loguear usuario
     if ($_SERVER['REQUEST_METHOD'] == 'GET')
