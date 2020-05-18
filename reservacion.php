@@ -11,16 +11,31 @@
 
         if(!empty($data))
         {
-            if(isset($data['usuario']) or isset($data['numReservacion']) or isset($data['cancha']) or isset($data['fecha']))
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
             {
-                $api->getById($data);
-                exit;
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
             }
-            else
+
+            if($vacio != 0)
             {
-                $mensaje->error('ERROR Los parametros son incorrectos');
+                $mensaje->error('Campos vacios');
             }
-            
+            else 
+            {
+                if(isset($data['usuario']) or isset($data['numReservacion']) or isset($data['cancha']) or isset($data['fecha']))
+                {
+                    $api->getById($data);
+                    exit;
+                }
+                else
+                {
+                    $mensaje->error('Los parametros son incorrectos');
+                }
+            }            
         }
         else
         {
@@ -28,7 +43,6 @@
             $api->getById($data);
             exit;
         }
-        
     }
 
     //insert
@@ -36,36 +50,57 @@
     {
         $data = $mensaje->obtenerJSON();
 
-        $i = count($data);
-
-        //reservacion administrativa
-        if($i == 6)
+        if(empty($data))
         {
-            if(isset($data['fecha']) && isset($data['usuarioAd']) && isset($data['dui']) && isset($data['hora']) 
-            && isset($data['cancha']) && isset($data['tipo']))
-            { 
-                $usuario = $api->obtenerIdUsuario($data['dui']);
-                $data['usuario'] = $usuario;
-                
-                $api->add($data);
-            }
-            else
-            {   
-                $mensaje->error('Error al llamar la API insertar');
-            }
+            $mensaje->error('ERROR al llamar API');
         }
-        
-        //reservacion usuario final
         else
         {
-            if(isset($data['fecha']) && isset($data['usuario']) && isset($data['hora']) 
-            && isset($data['cancha']) && isset($data['tipo']))
+            $i = count($data);
+            $datos = (array_values($data));
+            for($a = 0; $a < count($datos); $a++)
             {
-                $api->add($data);
+                if(empty($datos[$a])) 
+                {
+                    $vacio++;
+                }
             }
-            else
-            {   
-                $mensaje->error('Error al llamar la API insertar');
+
+            if($vacio != 0)
+            {
+                $mensaje->error('Campos vacios');
+            }
+            else 
+            {
+                //reservacion administrativa
+                if($i == 6)
+                {
+                    if(isset($data['fecha']) && isset($data['usuarioAd']) && isset($data['dui']) && isset($data['hora']) 
+                    && isset($data['cancha']) && isset($data['tipo']))
+                    { 
+                        $usuario = $api->obtenerIdUsuario($data['dui']);
+                        $data['usuario'] = $usuario;
+                        
+                        $api->add($data);
+                    }
+                    else
+                    {   
+                        $mensaje->error('Los parametros son incorrectos');
+                    }
+                }
+                //reservacion usuario final
+                else if ($i == 5)
+                {
+                    if(isset($data['fecha']) && isset($data['usuario']) && isset($data['hora']) 
+                    && isset($data['cancha']) && isset($data['tipo']))
+                    {
+                        $api->add($data);
+                    }
+                    else
+                    {   
+                        $mensaje->error('Los parametros son incorrectos');
+                    }
+                }
             }
         }
     }

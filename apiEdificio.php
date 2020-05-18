@@ -25,7 +25,7 @@
                         'idEstado'      =>$row['idEstado'],
                         'estado'        =>$row['estado'],
                         'descripcion'   =>$row['descripcion'],
-                        'imagen'        =>base64_encode($row['imagen'])
+                        'imagen'        =>$row['imagen']
                     );
                     array_push($edificios, $item);
                 }
@@ -58,7 +58,7 @@
                     'idEstado'      =>$row['idEstado'],
                     'estado'        =>$row['estado'],
                     'descripcion'   =>$row['descripcion'],
-                    'imagen'        =>base64_encode($row['imagen']),
+                    'imagen'        =>$row['imagen'],
                 );
                 array_push($edificios, $item);
  

@@ -33,7 +33,6 @@
         //consulta solo el id solicitado
         function listarCanchas($item)
         {
-            
             //creo un objeto de la clase estadoEdificio, donde esta la consulta
             $mensaje = new Mensajes_JSON();
             $cancha = new Cancha();
@@ -58,7 +57,7 @@
                         'tipo' 				    =>$row['tipo'],
                         'idEstado' 				=>$row['idEstado'],
                         'estado'                =>$row['estado'],
-                        'imagen'  =>base64_encode($row['imagen']),
+                        'imagen'                =>$row['imagen'],
                         'fechaCreacion'         =>$row['fechaCreacion']
                         );
                     array_push($canchas, $item);
@@ -122,7 +121,7 @@
             }
             else
             {
-                $mensaje->error('No se puede actualizar el estado');
+                $mensaje->error('ERROR no tiene permisos');
             }
         }
 

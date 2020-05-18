@@ -83,6 +83,25 @@ class reservacion extends ConexionDB
         return $query;
     }
 
+    function ConsultarReservasRechazadas($reserva)
+    {
+        $query = $this->connect()->prepare('Call getAllReservasRechazadas(:fecha, :hora, :cancha)');
+        $query->execute([   'fecha'         =>$reserva['fecha'], 
+                            'hora'          =>$reserva['hora'],
+                            'cancha'        =>$reserva['cancha']
+                        ]);
+
+        return $query;
+    }
+
+    function InsertHistorico($reserva)
+    {
+        $query = $this->connect()->prepare('Call InsertHistorico(:usuario, :reserva)');
+        $query->execute([ 'usuario'=>$reserva['usuario'], 'reserva'=>$reserva['reserva'] ]);
+
+        return $query;
+    }
+
     function ObtenerReservasFecha($reserva)
     {
         $query = $this->connect()->prepare('Call getAllReservacionesFecha(:fecha)');

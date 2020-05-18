@@ -184,11 +184,11 @@ CREATE TABLE `historico_reservacion` (
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DatosReserva`(in numR int)
 BEGIN
-	SELECT idReservacion AS idR, E.idEstado AS idE, idUsuario AS usu FROM reservacion
+	SELECT idReservacion AS idR, E.idEstado AS idE, idUsuario AS usu, fechaReservacion as fecha,
+    idCancha as cancha, idHorarioReservacion as hora FROM reservacion
 	INNER JOIN estado_reservacion AS E
 	ON E.idEstado = reservacion.idEstado 
 	WHERE numReservacion = numR;
-
 END ;;
 DELIMITER ;
 
@@ -576,6 +576,14 @@ END ;;
 DELIMITER ;
 
 DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllReservasRechazadas`(in fecha date, in hora int, in cancha int)
+BEGIN
+	SELECT idReservacion AS reserva FROM reservacion WHERE idCancha = cancha AND idHorarioReservacion = hora
+    AND fechaReservacion = fecha AND idEstado = 2;
+END ;;
+DELIMITER ;
+
+DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllRolUsuario`(in _idRol int, in accion varchar(8), in _rol varchar(20))
 BEGIN
 	if(_idRol = 0 && accion = "listar")
@@ -824,11 +832,18 @@ END ;;
 DELIMITER ;
 
 DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertHistorico`(in usu int, in id int)
+BEGIN
+	/*insert tabla historico*/
+	INSERT INTO historico_reservacion(fechayHoraEvento, idUsuario, idReservacion, idEstado, comentarios)
+	VALUES(sysdate(), usu, id, 2, 'EXISTE OTRA RESERVACION APROBADA A LA MISMA HORA');
+END ;;
+DELIMITER ;
+
+DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertHorarioReservacion`(in _horaInicio time, in _horaFin time)
 BEGIN
-	
     INSERT INTO horario_reservacion (horaInicio, horaFin) VALUES (_horaInicio, _horaFin);
-    
 END ;;
 DELIMITER ;
 
@@ -836,7 +851,6 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertReservacion`(in fecha date, in usuRe int, 
 							in hora int, in cancha int, in est int, in tipo int)
 BEGIN
-	
     DECLARE contador INT DEFAULT 0;
     
     SET contador = (SELECT idRol FROM usuario WHERE idusuario=usuRe);
@@ -1049,24 +1063,56 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateReservacion`(in id int, in usu int, in est int, in comen varchar(100))
 BEGIN
-	
-    UPDATE reservacion SET idEstado = est WHERE idReservacion = id;
+	DECLARE fecha DATE DEFAULT 0;
+    DECLARE hora INT DEFAULT 0;
+    DECLARE cancha INT DEFAULT 0;
     
-    /*insert tabla historico*/
-    IF(est = 4)
+    IF(est = 2)
     THEN
-		INSERT INTO historico_reservacion(fechayHoraEvento, idUsuario, idReservacion, idEstado, comentarios)
-		VALUES(sysdate(), usu, id, est, comen);
-    END IF;
-    IF(est = 2 or est = 3 or est = 5 or est = 6 or est = 7)
-    THEN
+		/*update estado reservacion*/
+		UPDATE reservacion SET idEstado = est WHERE idReservacion = id;
+        
+        /*insert tabla historico*/
 		INSERT INTO historico_reservacion(fechayHoraEvento, idUsuario, idReservacion, idEstado, comentarios)
 		VALUES(sysdate(), usu, id, est, '');
     END IF;
-	
-    SELECT estado FROM reservacion INNER JOIN estado_reservacion AS E
-    ON E.idEstado = reservacion.idEstado  WHERE idReservacion = id;
+    IF(est = 3)
+    THEN
+		/*primero pasa todas las reservas a rechazadas*/
+        SET fecha = (SELECT fechaReservacion FROM reservacion WHERE idReservacion = id);
+		SET hora = (SELECT idHorarioReservacion FROM reservacion WHERE idReservacion = id);
+		SET cancha = (SELECT idCancha FROM reservacion WHERE idReservacion = id);
+        
+        UPDATE reservacion SET idEstado = 2 WHERE fechaReservacion = fecha AND idHorarioReservacion = hora AND idCancha = cancha;
+        
+		/*update estado aprobado*/
+		UPDATE reservacion SET idEstado = est WHERE idReservacion = id;
+        
+         /*insert tabla historico*/
+		INSERT INTO historico_reservacion(fechayHoraEvento, idUsuario, idReservacion, idEstado, comentarios)
+		VALUES(sysdate(), usu, id, est, '');
+    END IF;
+    IF(est = 4)
+    THEN
+		/*update estado reservacion*/
+		UPDATE reservacion SET idEstado = est WHERE idReservacion = id;
+        
+        /*insert tabla historico*/
+		INSERT INTO historico_reservacion(fechayHoraEvento, idUsuario, idReservacion, idEstado, comentarios)
+		VALUES(sysdate(), usu, id, est, comen);
+    END IF;
+    IF(est = 5 or est = 6 or est = 7)
+    THEN
+		/*update estado reservacion*/
+		UPDATE reservacion SET idEstado = est WHERE idReservacion = id;
+        
+        /*insert tabla historico*/
+		INSERT INTO historico_reservacion(fechayHoraEvento, idUsuario, idReservacion, idEstado, comentarios)
+		VALUES(sysdate(), usu, id, est, '');
+    END IF;
     
+    SELECT estado FROM reservacion INNER JOIN estado_reservacion AS E
+	ON E.idEstado = reservacion.idEstado  WHERE idReservacion = id;
 END ;;
 DELIMITER ;
 

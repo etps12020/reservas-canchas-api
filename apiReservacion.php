@@ -109,8 +109,8 @@
             {
                 $mensaje->error('El usuario no puede realizar ninguna reservacion, consulte con Admin Academica');
             }
-            
         }
+
 
         function update($item)
         {
@@ -172,16 +172,37 @@
             }
         }
 
+        
         function updateEstado($item)
         {   
             $mensaje = new Mensajes_JSON();
             $reserva = new reservacion();
-            unset($item['numReserva']);
 
             $res = $reserva->UpdateReserva($item);
             $row = $res->fetch();
             $mensaje->exito('Reservacion '. $row['estado']);
+
+            if($row['estado'] == 'APROBADO')
+            {
+                $this->obtenerID($item);
+                $datos = array();
+                $datos = ['fecha'=>$this->fecha, 'hora'=>$this->hora, 'cancha'=>$this->cancha];
+                $res = $reserva->ConsultarReservasRechazadas($datos);
+
+                if($res->rowCount())
+                {
+                    while($row = $res->fetch(PDO::FETCH_ASSOC))
+                    {
+                        $data = array(
+                            'reserva' => $row['reserva'],
+                            'usuario' => $item['usuario']
+                        );
+                        $reserva->InsertHistorico($data);
+                    }
+                }
+            }
         }   
+
 
         function numCancelaciones($usu)
         {   
@@ -203,6 +224,7 @@
             }
         }
 
+        
         //obtener Usuario
         function obtenerIdUsuario($usu)
         {
@@ -223,6 +245,9 @@
             $this->idEstado  = $idEstado = $row['idE'];
             $this->idReserva = $idReserva = $row['idR'];
             $this->idUsu = $idUsu = $row['usu'];
+            $this->fecha = $fecha = $row['fecha'];
+            $this->cancha = $cancha = $row['cancha'];
+            $this->hora = $hora = $row['hora'];
         }
 
     }
