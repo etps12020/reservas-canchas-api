@@ -215,7 +215,7 @@
                         $RolU = $row['var'];
 
                         //rol del usuario que actualiza
-                        $res = $perm->getRolUsuario($id = $item['usuloguedo']);
+                        $res = $perm->getRolUsuario($id = $item['usulogueado']);
                         $row = $res->fetch(); 
                         $rolA = $row['var'];
 
@@ -223,11 +223,19 @@
                         {
                             $res = $usuario->actualizarUsuario($item);
                             $mensaje->exito('Datos actualizados');
+                            
                         }
-                        else if ($RolU == 2 && $rolA = 1)
+                        else if ($RolU == 2 && $rolA == 1)
                         {
                             $res = $usuario->actualizarUsuario($item);
                             $mensaje->exito('Datos actualizados');
+                            
+                        }
+                        else if ($RolU == 1 && $rolA == 1)
+                        {
+                            $res = $usuario->actualizarUsuario($item);
+                            $mensaje->exito('Datos actualizados');
+                            
                         }
                         else
                         {
