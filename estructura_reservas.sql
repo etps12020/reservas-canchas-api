@@ -1063,7 +1063,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateReservacion`(in id int, in usu int, in est int, in comen varchar(100))
 BEGIN
-	DECLARE fecha DATE DEFAULT 0;
+	DECLARE fecha DATE;
     DECLARE hora INT DEFAULT 0;
     DECLARE cancha INT DEFAULT 0;
     

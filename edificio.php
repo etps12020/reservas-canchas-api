@@ -4,6 +4,7 @@
 
     $mensaje = new Mensajes_JSON();
     $api = new ApiEdificios();
+    $vacio= 0;
 
     //peticion get para listar todos los datos o solo el ID requerido
     if ($_SERVER['REQUEST_METHOD'] == 'GET')
@@ -24,6 +25,11 @@
             {
                 $mensaje->error('Los parametros son incorrectos');          
             }
+        }
+        else if(isset($data['activos']))
+        {
+            $api->listarActivos();
+            exit;
         }
         else
         {   

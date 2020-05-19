@@ -118,12 +118,13 @@
             $estadoActual = $this->idEstado;
             $item['id'] = $this->idReserva;
             $usu = $this->idUsu;
-
+           
             $nuevoEstado = $item['estado'];
             
             //consultar el nivel de usuario que esta modificando el estado
             $res = $perm->getRolUsuario($id = $item['usuario']);
             $row = $res->fetch(); 
+
             $rol = $row['var'];
 
             //solo el usuario final puede cancelar la reservacion
@@ -131,7 +132,7 @@
             {
                 if($estadoActual == 1 or $estadoActual == 3)
                 {
-                    //llama a la funcion update
+                   //llama a la funcion update
                    $this->updateEstado($item);
 
                     //llama a la funcion para contar el numero de cancelaciones realizadas
@@ -228,7 +229,6 @@
             $res = $perm->getIdUsuario($usu);
             $row = $res->fetch();
             $id = $row['id'];
-
             return $this->id = $id;
         }
 
