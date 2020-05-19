@@ -28,7 +28,7 @@ CREATE TABLE `estado_historico` (
 DROP TABLE IF EXISTS `estado_reservacion`;
 CREATE TABLE `estado_reservacion` (
   `idEstado` int NOT NULL AUTO_INCREMENT,
-  `estado` varchar(25) NOT NULL,
+  `estado` varchar(30) NOT NULL,
   PRIMARY KEY (`idEstado`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -496,7 +496,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllReservacionesFecha`(in _fechaR date)
 BEGIN
-        IF(_fechaR IS NOT NULL AND _fechaR !='0000-00-0')
+        IF(_fechaR IS NOT NULL AND _fechaR !='2020-01-1')
         THEN
 			/*listado de todas las reservaciones filtradas por fecha*/
 			SELECT fechayHoraCreacion, numReservacion, R.idUsuario, nombreCompleto, telefono,fechaReservacion, R.idHorarioReservacion, 
@@ -512,7 +512,7 @@ BEGIN
 			ON usuario.idUsuario = R.idUsuario
 			WHERE fechaReservacion = _fechaR ORDER BY fechayHoraCreacion asc;
         END IF;
-        IF(_fechaR = '0000-00-0')
+        IF(_fechaR = '2020-01-1')
         THEN
 			/*listado de todas las reservaciones del ultimo mes*/
 			SELECT fechayHoraCreacion, numReservacion, R.idUsuario, nombreCompleto, telefono,fechaReservacion, R.idHorarioReservacion, 

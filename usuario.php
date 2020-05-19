@@ -120,7 +120,7 @@
             {
                 if($i == 10)
                 {
-                    if(isset($data['usulogueado']) && isset($data['id']) && isset($data['nombre']) && isset($data['dui']) && isset($data['carnet']) && isset($data['correo']) 
+                    if(isset($data['usuloguedo']) && isset($data['id']) && isset($data['nombre']) && isset($data['dui']) && isset($data['carnet']) && isset($data['correo']) 
                     && isset($data['telefono']) && isset($data['password']) && isset($data['rol']) && isset($data['estado']))
                     {
                         

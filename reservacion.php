@@ -39,7 +39,7 @@
         }
         else
         {
-            $data = ['fecha' =>'0000-00-0'];
+            $data = ['fecha' =>'2020-01-1'];
             $api->getById($data);
             exit;
         }

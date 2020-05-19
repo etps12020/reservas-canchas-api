@@ -105,7 +105,7 @@ class reservacion extends ConexionDB
     function ObtenerReservasFecha($reserva)
     {
         $query = $this->connect()->prepare('Call getAllReservacionesFecha(:fecha)');
-        $query->execute([   'fecha' =>$reserva['fecha'] ]);
+        $query->execute(['fecha' =>$reserva['fecha']]);
 
         return $query;
     }

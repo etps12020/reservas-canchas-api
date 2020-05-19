@@ -37,10 +37,6 @@
                 $item['fecha'] = $mensaje->formatFecha($item['fecha']);
                 $listar->listarReservasFecha($item);
             }
-            else
-            {
-                $listar->listarReservasFecha($item);
-            }
         }
 
         
@@ -81,12 +77,12 @@
                             //usuario que esta realizando la reserva
                             if(array_key_exists('usuarioAd', $item))
                             {
-                                $res = $reserva->registrarReserva($item);
+                                $reserva->registrarReserva($item);
                                 $mensaje->exito('Reservacion registrada por Asistente');
                             }
                             else
                             {
-                                $res = $reserva->nuevaReserva($item);
+                                $reserva->nuevaReserva($item);
                                 $mensaje->exito('Reservacion registrada por usuario');
                             }
                         }

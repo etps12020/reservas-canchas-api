@@ -215,7 +215,7 @@
                         $RolU = $row['var'];
 
                         //rol del usuario que actualiza
-                        $res = $perm->getRolUsuario($id = $item['usulogueado']);
+                        $res = $perm->getRolUsuario($id = $item['usuloguedo']);
                         $row = $res->fetch(); 
                         $rolA = $row['var'];
 
