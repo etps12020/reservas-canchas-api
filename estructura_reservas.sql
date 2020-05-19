@@ -279,7 +279,7 @@ BEGIN
     END IF;
     IF(id = 2)
     THEN
-		SELECT idUsuario, dui FROM usuario WHERE idEstado = 1 AND idRol = 3;
+    SELECT idUsuario, dui FROM usuario WHERE idEstado = 1 AND idRol = 3 OR idRol = 2;
     END IF;
 END ;;
 DELIMITER ;
@@ -899,16 +899,34 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertReservacionAdmin`(in fecha date, in usuAd int,in usuRe int, 
 							in hora int, in cancha int, in est int, in tipo int)
 BEGIN
-	
-    INSERT INTO reservacion(numReservacion, fechayHoraCreacion, fechaReservacion, idUsuario, 
-							idHorarioReservacion, idCancha, idEstado, idTipoReservacion)
-			VALUES( (SELECT count(H.idEstado)+1 FROM historico_reservacion as H
-			INNER JOIN estado_historico
-			WHERE estado = 'creado'), sysdate(), fecha, usuRe, hora, cancha, est, tipo);
-	
-	/*insert tabla historico*/
-	INSERT INTO historico_reservacion(fechayHoraEvento, idUsuario, idReservacion, idEstado, comentarios)
-	VALUES(sysdate(), usuAd, (select last_insert_id()), est, '');
+	DECLARE contador INT DEFAULT 0;
+    
+    SET contador = (SELECT idRol FROM usuario WHERE idusuario=usuRe);
+    
+    IF(contador = 1)
+    THEN
+		INSERT INTO reservacion(numReservacion, fechayHoraCreacion, fechaReservacion, idUsuario, 
+					idHorarioReservacion, idCancha, idEstado, idTipoReservacion)
+		VALUES( (SELECT count(H.idEstado)+1 FROM historico_reservacion as H
+		INNER JOIN estado_historico
+		WHERE estado = 'creado'), sysdate(), fecha, usuRe, hora, cancha, 3, tipo);
+        
+        /*insert tabla historico*/
+		INSERT INTO historico_reservacion(fechayHoraEvento, idUsuario, idReservacion, idEstado, comentarios)
+		VALUES(sysdate(), usuAd, (select last_insert_id()), 3, '');
+    END IF;
+    IF(contador = 2 or contador = 3)
+    THEN
+		INSERT INTO reservacion(numReservacion, fechayHoraCreacion, fechaReservacion, idUsuario, 
+					idHorarioReservacion, idCancha, idEstado, idTipoReservacion)
+		VALUES( (SELECT count(H.idEstado)+1 FROM historico_reservacion as H
+		INNER JOIN estado_historico
+		WHERE estado = 'creado'), sysdate(), fecha, usuRe, hora, cancha, est, tipo);
+        
+        /*insert tabla historico*/
+		INSERT INTO historico_reservacion(fechayHoraEvento, idUsuario, idReservacion, idEstado, comentarios)
+		VALUES(sysdate(), usuAd, (select last_insert_id()), est, '');
+	END IF;
     
 END ;;
 DELIMITER ;
