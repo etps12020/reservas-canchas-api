@@ -25,6 +25,9 @@
             {
                 $mensaje->error('Los parametros son incorrectos');          
             }
+        }else if(isset($data['activos'])){
+            $api->listarActivos();
+            exit;
         }
         else
         {   

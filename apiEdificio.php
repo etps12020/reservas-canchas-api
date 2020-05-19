@@ -5,6 +5,42 @@
     class ApiEdificios                        
     {
 
+        function listarActivos(){
+            $mensaje = new Mensajes_JSON();
+            
+            $edificio = new edificio();
+            $edificios = array();
+
+            $res = $edificio->obtenerEdificios();
+            if($res->rowCount())
+            {
+                while($row = $res->fetch(PDO::FETCH_ASSOC))
+                {
+                    if($row['idEstado']==1){
+                        $item = array(
+                            'id'            =>$row['idEdificio'],
+                            'nombre'        =>$row['nombre'],
+                            'direccion'     =>$row['direccion'],
+                            'idEstado'      =>$row['idEstado'],
+                            'estado'        =>$row['estado'],
+                            'descripcion'   =>$row['descripcion']                        
+                        );
+                        array_push($edificios, $item);
+                    }
+                    
+                }
+
+                
+
+
+                $mensaje->printJSON($edificios);
+            }
+            else
+            {
+                $mensaje->error('No hay elementos seleccionados');
+            }
+        }
+
         //lista todos los datos
         function getAll()
         {
