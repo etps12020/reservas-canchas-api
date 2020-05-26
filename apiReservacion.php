@@ -185,8 +185,11 @@
 
             $res = $reserva->UpdateReserva($item);
             $row = $res->fetch();
-            $mensaje->exito('Reservacion '. $row['estado']);
-
+            if($row['estado'] != 'Cancelado')
+            {
+                $mensaje->exito('Reservacion '. $row['estado']);
+            }
+           
             if($row['estado'] == 'APROBADO')
             {
                 $this->obtenerID($item);
@@ -226,6 +229,34 @@
             else
             {
                 $mensaje->exito('Posee '. $row['num'] . ' de 3 Cancelaciones posibles');
+            }
+        }
+
+        function notificacionReserva($id)
+        {
+            $reserva = new reservacion();
+            $mensaje = new Mensajes_JSON();
+
+            $reservaciones = array();
+            $res = $reserva->Notificaciones($id);
+
+            if($res->rowCount())
+            {
+                while($row = $res->fetch(PDO::FETCH_ASSOC))
+                { 
+                   $item = array(
+                    'numReservacion'    =>$row['numReservacion'],
+                    'fechaReservacion'  =>$row['fechaReservacion'],
+                    'idEstado'          =>$row['idEstado'],
+                    'estado'            =>$row['estado']
+                    );
+                array_push($reservaciones, $item);
+                }
+                $mensaje->printJSON($reservaciones);
+            }
+            else
+            {
+                $mensaje->error('No hay elementos seleccionados');
             }
         }
 

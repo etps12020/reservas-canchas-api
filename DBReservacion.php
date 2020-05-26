@@ -134,5 +134,14 @@ class reservacion extends ConexionDB
 
         return $query;
     }
+
+    function Notificaciones($id)
+    {
+        $query = $this->connect()->prepare('Call getAllNotiResera(:num)');
+        $query->execute([ 'num'=>$id]);
+
+        return $query;
+    }
+
 }
 ?>

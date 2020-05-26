@@ -474,6 +474,17 @@ END ;;
 DELIMITER ;
 
 DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllNotiResera`(in num int)
+BEGIN
+	SELECT numReservacion, fechaReservacion, R.idEstado, estado
+	FROM reservacion AS R
+	INNER JOIN estado_reservacion AS ER
+	ON ER.idEstado = R.idEstado
+	WHERE numReservacion >=num;
+END ;;
+DELIMITER ;
+
+DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllReservacionesCancha`( in _cancha int)
 BEGIN
 	IF(_cancha IS NOT NULL AND _cancha !=0)
@@ -616,7 +627,7 @@ BEGIN
         THEN
 			/*seguimiento de una reservacion*/
 			SELECT R.fechayHoraCreacion, R.fechaReservacion, numReservacion, (SELECT usuario FROM usuario WHERE idUsuario = HI.idUsuario) AS AdminUsuario, 
-            nombreCompleto AS UsuarioFinal, EH.estado,
+            nombreCompleto AS UsuarioFinal, concat(horaInicio, ' - ', horaFin) AS Horario, EH.idEstado, EH.estado,
             comentarios FROM reservacion AS R
 			INNER JOIN historico_reservacion AS HI
 			ON HI.idReservacion = R.idReservacion
@@ -624,6 +635,8 @@ BEGIN
 			ON EH.idEstado = HI.idEstado
             INNER JOIN usuario
             ON usuario.idUsuario = R.idUsuario
+            INNER JOIN horario_reservacion AS HR
+            ON HR.idHorarioReservacion = R.idHorarioReservacion
 			WHERE R.numReservacion = _numRe;
         END IF;
 END ;;

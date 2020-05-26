@@ -28,6 +28,7 @@
             {
                 if(isset($data['usuario']) or isset($data['numReservacion']) or isset($data['cancha']) or isset($data['fecha']))
                 {
+                    
                     $api->getById($data);
                     exit;
                 }
@@ -78,10 +79,17 @@
                     if(isset($data['fecha']) && isset($data['usuarioAd']) && isset($data['dui']) && isset($data['hora']) 
                     && isset($data['cancha']) && isset($data['tipo']))
                     { 
-                        $usuario = $api->obtenerIdUsuario($data['dui']);
-                        $data['usuario'] = $usuario;
-                        
-                        $api->add($data);
+                       $usuario = $api->obtenerIdUsuario($data['dui']);
+                       if(!empty($usuario))
+                       {
+                            $data['usuario'] = $usuario;
+                            $api->add($data);
+                       }
+                       else
+                       {
+                            $mensaje->error('El numero de dui no esta registrado');
+                       }
+                       
                     }
                     else
                     {   

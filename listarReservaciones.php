@@ -58,6 +58,8 @@
                         'numReservacion'    =>$row['numReservacion'],
                         'AdminUsuario'      =>$row['AdminUsuario'],
                         'UsuarioFinal'      =>$row['UsuarioFinal'],
+                        'Horario'           =>$row['Horario'],
+                        'idEstado'          =>$row['idEstado'],
                         'estado'            =>$row['estado'],
                         'comentarios'       =>$row['comentarios']
                     );
